@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, redirect, url_for
 import sys
 app = Flask(__name__)
 USERINFO = {}
@@ -17,28 +17,38 @@ def send_message(message):
         }
     return message
 
+def post(message):
+    return jsonify(message)
+
 @app.route('/IsUserNew', methods=['POST'])
 def IsUserNew():
     content = request.get_json()
     user_id = content['userRequest']['user']['id']
+    user_answer = content['userRequest']['utterance']
     if user_id not in USERINFO.keys():
         USERINFO[user_id]={}
+        USERINFO[user_id]['LastMessage'] = user_answer
     else:
         pass
 
+
     print(USERINFO)
 
-    return jsonify(content)
+    message = send_message("넌 남자니 여자니")
 
-@app.route('/UserSex', methods=['POST'])
+    #UserSex로 재연결
+    return message
+
+@app.route('/UserSex/', methods=['POST'])
 def UserSex():
+
     content = request.get_json()
     user_id = content['userRequest']['user']['id']
     user_answer = content['userRequest']['utterance']
     USERINFO[user_id]['Sex']=user_answer
     print(USERINFO)
     return jsonify(content)
-# @app.route('/test',methods=['POST'])
+# # @app.route('/test',methods=['POST'])
 # def test():
 #     send_message('성별이 뭐야')
 #     content = request.get_json()
