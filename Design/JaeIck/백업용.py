@@ -153,18 +153,11 @@ def UserDataGet(VarName):
     content = request.get_json()
     user_id = content['userRequest']['user']['id']
     user_answer = content['userRequest']['utterance']
-    SQL_function.update_data("kakaotalk","{}".format(VarName),user_answer,user_id)
-    
-    return 0
+    USERINFO[user_id][VarName]=user_answer
 
-def UserDateDataGet():
-    content = request.get_json()
-    user_id = content['userRequest']['user']['id']
-    user_answer = content['userRequest']['utterance']
-    SQL_function.update_data("kakaotalk","start_date",user_answer[0:6],user_id)
-    SQL_function.update_data("kakaotalk","end_date",user_answer[7:],user_id)
-    
+    print(USERINFO)
     return 0
+ 
 def UserShow():
     #USER정보 같은사람을 따로 추출하여 DB화하는 작업은 여기에 들어가야함
     message = {
@@ -235,70 +228,18 @@ def IsUserNew():
 
     #신규회원이 들어올경우 웰컴 메시지
     if user_id not in USERINFO.keys() and answer =="동행 찾아볼래!":
-        USERINFO[user_id]={}
-        SQL_function.insert_id_data("kakaotalk",(user_id,"new","new",0))
+        USERINFO[user_id] = {}
+        USERINFO[user_id]['IsNew'] = 'New'
+        USERINFO[user_id]['Flag'] = 'New'
+        USERINFO[user_id]['SearchTimes']=0
         message = Send_Button("처음왔구나 동행을 찾기위해선 너의 정보가 필요해! 작성 도중 처음화면으로 돌아가게되면 정보가 저장되지 않으니 주의해!\n너의 정보를 내가 물어봐도 괜찮아?","응","아니")
-        
-    #신규회원이 작성도중 처음으로 갔을경우의 Flow
-    elif SQL_function.search_data("kakaotalk","user_state",user_id,1)[0]=='new' and answer =="동행 찾아볼래!":
-        SQL_function.update_data("kakaotalk","dialog_state","new",user_id)
-        message = Send_Button("저번에 작성하다가 그만뒀구나! 그럼 처음부터 다시물어봐야하는데 괜찮지?\n너의 정보를 내가 물어봐도 괜찮아?","응","아니")
-    
-    #정보 물어도 된다고 하면 성별 묻기
-    elif user_id in USERINFO.keys() and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0]=='new' and answer =="응":
-        SQL_function.update_data("kakaotalk","dialog_state","sex",user_id)
-        message = Send_Button("알겠어! 그럼 넌 남자야 여자야??","남자","여자")
-       
-    #신규회원 성별묻기
-    elif user_id in USERINFO.keys() and SQL_function.search_data("kakaotalk","user_state",user_id,1)[0]=='new' and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0]=='sex':
-        SQL_function.update_data("kakaotalk","dialog_state","age",user_id)
-        USERINFO[user_id]['Flag'] = 'age'
-        UserDataGet('sex')
-        message = send_message("{}구나! 그럼 몇 살이야? 20살이라면 20처럼 숫자만 입력해봐 ".format(SQL_function.search_data("kakaotalk","sex",user_id,1)[0]))
-    
-        
-    #신규회원 나이묻기
-    elif user_id in USERINFO.keys() and SQL_function.search_data("kakaotalk","user_state",user_id,1)[0]=='new' and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0]=='age':
-        SQL_function.update_data("kakaotalk","dialog_state","country",user_id)
-        UserDataGet('age')
-        message = send_message("{}살 이구나! 여행하는 나라는 어디야? ".format(SQL_function.search_data("kakaotalk","age",user_id,1)[0]))
-    
-    #신규회원 여행국가묻기
-    elif user_id in USERINFO.keys() and SQL_function.search_data("kakaotalk","user_state",user_id,1)[0]=='new' and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0]=='country':
-        SQL_function.update_data("kakaotalk","dialog_state","city",user_id)
-        UserDataGet('country')
-        message = send_message("{} 여행하는구나! 여행하는 도시는 어디야? ".format(SQL_function.search_data("kakaotalk","country",user_id,1)[0]))
-    
-    #신규회원 여행도시묻기
-    elif user_id in USERINFO.keys() and SQL_function.search_data("kakaotalk","user_state",user_id,1)[0]=='new' and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0]=='city':
-        SQL_function.update_data("kakaotalk","dialog_state","date",user_id)
-        UserDataGet('city')
-        
-        message = send_message("{} 여행하는구나! 여행날짜도 좀 적어줘! ex)191114~191117  ".format(SQL_function.search_data("kakaotalk","city",user_id,1)[0]))
-    
-    #신규회원 여행기간 묻기
-    elif user_id in USERINFO.keys() and SQL_function.search_data("kakaotalk","user_state",user_id,1)[0]=='new' and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0]=='date':
-        SQL_function.update_data("kakaotalk","dialog_state","profile_image",user_id)
-        UserDateDataGet()
-        message = send_message("프로필 사진에 사용될 사진을 앨범에서 보내줘")
+        print(USERINFO)
 
-    #신규회원 사진받아오기
-    elif user_id in USERINFO.keys() and SQL_function.search_data("kakaotalk","user_state",user_id,1)[0]=='new' and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0]=='profile_image':
-        SQL_function.update_data("kakaotalk","dialog_state","kakao_id",user_id)
-        UserDataGet('profile_image')
-        message = send_message("그럼 다른 사람이 너에게 연락할 수 있도록 카카오톡 ID를 알려줄래?")
-    
-    #신규회원이 자신의 정보를 모두 입력하는 순간 기존회원으로 등업이된다
-    elif user_id in USERINFO.keys() and SQL_function.search_data("kakaotalk","user_state",user_id,1)[0]=='new' and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0]=='kakao_id':
-        SQL_function.update_data("kakaotalk","user_state","Existing",user_id)
-        SQL_function.update_data("kakaotalk","dialog_state","done",user_id)
-        
-        UserDataGet('kakao_id')
-        message = UserProfile_Button("너의 정보를 확인해봐\n성별 : {}\n나이 : {}\n여행지 : {}\n여행날짜 : {}\n이정보로 동행 바로 찾아줄까?".format(SQL_function.search_data("kakaotalk","sex",user_id,1)[0],
-                                                                                                                                            SQL_function.search_data("kakaotalk","age",user_id,1)[0],
-                                                                                                                                            (SQL_function.search_data("kakaotalk","country",user_id,1)[0]+' '+SQL_function.search_data("kakaotalk","city",user_id,1)[0]),
-                                                                                                                                            (SQL_function.search_data("kakaotalk","start_date",user_id,1)[0] + '~'+SQL_function.search_data("kakaotalk","end_date",user_id,1)[0])),user_id,"응","정보 수정할래","내 프로필 사진 볼래")
-   
+    #신규회원이 작성도중 처음으로 갔을경우의 Flow
+    elif USERINFO[user_id]['IsNew']=='New' and answer =="동행 찾아볼래!":
+        USERINFO[user_id]['Flag']='New'
+        message = Send_Button("저번에 작성하다가 그만뒀구나! 그럼 처음부터 다시물어봐야하는데 괜찮지?\n너의 정보를 내가 물어봐도 괜찮아?","응","아니")
+       
     #기존회원 성별 수정 FLOW
     elif user_id in USERINFO.keys() and USERINFO[user_id]['IsNew'] == "Existing" and USERINFO[user_id]['Flag'] == "Done" and answer == "성별 수정할래":
         USERINFO[user_id]['Flag'] = 'Sex'
@@ -358,14 +299,61 @@ def IsUserNew():
     elif user_id in USERINFO.keys() and  USERINFO[user_id]['Flag'] == 'Done' and answer =="응":
         message = UserShow()
     
-    
+    #정보 물어도 된다고 하면 성별 묻기
+    elif user_id in USERINFO.keys() and USERINFO[user_id]['Flag'] == 'New' and answer =="응":
+        USERINFO[user_id]['Flag']='Sex'
+        message = Send_Button("알겠어! 그럼 넌 남자야 여자야??","남자","여자")
+       
     elif user_id in USERINFO.keys() and USERINFO[user_id]['IsNew'] == "Existing" and USERINFO[user_id]['Flag'] == 'Done' and answer =="동행 찾아볼래!":
         message = UserProfile_Button("현재 저장된 정보를 확인해봐\n성별 : {}\n나이 : {}\n여행지 : {}\n여행날짜 : {}\n같은 정보로 찾아줄까?".format(USERINFO[user_id]['Sex'],USERINFO[user_id]['Age'],(USERINFO[user_id]['Country']+' '+USERINFO[user_id]['City']),USERINFO[user_id]['Date']),user_id,"응","정보 수정할래","내 프로필 사진 볼래")
 
     elif user_id in USERINFO.keys() and USERINFO[user_id]['IsNew'] == "Existing" and USERINFO[user_id]['Flag'] == 'Done' and answer =="정보 수정할래":
         message = Change_Button()
 
+    #신규회원 성별묻기
+    elif user_id in USERINFO.keys() and USERINFO[user_id]['IsNew'] == "New" and USERINFO[user_id]['Flag'] == 'Sex':
+        USERINFO[user_id]['Flag'] = 'Age'
+        UserDataGet('Sex')
+        message = send_message("{}구나! 그럼 몇 살이야? 20살이라면 20처럼 숫자만 입력해봐 ".format(USERINFO[user_id]['Sex']))
     
+        
+    #신규회원 나이묻기
+    elif user_id in USERINFO.keys() and USERINFO[user_id]['IsNew'] == "New" and USERINFO[user_id]['Flag'] == 'Age':
+        USERINFO[user_id]['Flag'] = 'Country'
+        UserDataGet('Age')
+        message = send_message("{}살 이구나! 여행하는 나라는 어디야? ".format(USERINFO[user_id]['Age']))
+    
+    #신규회원 여행국가묻기
+    elif user_id in USERINFO.keys() and USERINFO[user_id]['IsNew'] == "New" and USERINFO[user_id]['Flag'] == 'Country':
+        USERINFO[user_id]['Flag'] = 'City'
+        UserDataGet('Country')
+        message = send_message("{} 여행하는구나! 여행하는 도시는 어디야? ".format(USERINFO[user_id]['Country']))
+    
+    #신규회원 여행도시묻기
+    elif user_id in USERINFO.keys() and USERINFO[user_id]['IsNew'] == "New" and USERINFO[user_id]['Flag'] == 'City':
+        USERINFO[user_id]['Flag'] = 'Date'
+        UserDataGet('City')
+        message = send_message("{} 여행하는구나! 여행날짜도 좀 적어줘! ex)191114~191117  ".format(USERINFO[user_id]['City']))
+    
+    #신규회원 여행기간 묻기
+    elif user_id in USERINFO.keys() and USERINFO[user_id]['IsNew'] == "New" and USERINFO[user_id]['Flag'] == 'Date':
+        USERINFO[user_id]['Flag'] = 'Photo'
+        UserDataGet('Date')
+        message = send_message("프로필 사진에 사용될 사진을 앨범에서 보내줘")
+
+    #신규회원 사진받아오기
+    elif user_id in USERINFO.keys() and USERINFO[user_id]['IsNew'] == "New" and USERINFO[user_id]['Flag'] == 'Photo':
+        USERINFO[user_id]['Flag'] = 'KakaoID'
+        UserDataGet('Photo')
+        message = send_message("그럼 다른 사람이 너에게 연락할 수 있도록 카카오톡 ID를 알려줄래?")
+    
+    #신규회원이 자신의 정보를 모두 입력하는 순간 기존회원으로 등업이된다
+    elif user_id in USERINFO.keys() and USERINFO[user_id]['IsNew'] == "New" and USERINFO[user_id]['Flag'] == 'KakaoID':
+        USERINFO[user_id]['IsNew']='Existing'
+        USERINFO[user_id]['Flag'] = 'Done'
+        UserDataGet('KakaoID')
+        message = UserProfile_Button("너의 정보를 확인해봐\n성별 : {}\n나이 : {}\n여행지 : {}\n여행날짜 : {}\n이정보로 동행 바로 찾아줄까?".format(USERINFO[user_id]['Sex'],USERINFO[user_id]['Age'],(USERINFO[user_id]['Country']+' '+USERINFO[user_id]['City']),USERINFO[user_id]['Date']),user_id,"응","정보 수정할래","내 프로필 사진 볼래")
+
 
     elif user_id in USERINFO.keys() and USERINFO[user_id]['Flag'] == 'Done' and answer == "이사람이 좋아! 연락처 줘" :
         if USERINFO[user_id]['SearchTimes']<3:
