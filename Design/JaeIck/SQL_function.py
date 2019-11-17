@@ -4,12 +4,12 @@ conn = pymysql.connect(host = 'localhost', user = 'root', password = 'root', db 
 curs = conn.cursor()
 
 def is_user_new(platform,user_id):
-    if type(search_data(platform,"id",user_id,1)[0]) is str:
-        print("기존유저")
-        return 0
-    elif type(search_data(platform,"id",user_id,1)[0]) is not str:
+    if (search_data(platform,"id",user_id,1)) is False:
         print("신규유저")
-        return 0
+        return True
+    else: 
+        print("기존유저")
+        return False
 
 # id 데이터 삽입
 def insert_id_data(platform, data):
@@ -126,9 +126,9 @@ if __name__ == "__main__":
     # insert_id_data("kakaotalk",(5,"New","New",0))
     
     # insert_id_data("telegram", (2, "lee"))
-    # search_data("kakaotalk","id",5,1)
-    # update_data("kakaotalk", "user_state", 'Existing', 5)
-    is_user_new('kakaotalk',"f65ae1a1616f448e28aa5e6d")
+    search_data("kakaotalk","open_cnt","f65ae1aabf7764aa7b18af50c25fe526eee49ee90c55433401616f448e28aa5e6d",1)
+    update_data("kakaotalk", "user_state", 'Existing', user_id)
+    # is_user_new('kakaotalk',"f65ae1a1616f448e28aa5e6d")
     # users = search_user("facebook", 24)
     # print(users)
 
