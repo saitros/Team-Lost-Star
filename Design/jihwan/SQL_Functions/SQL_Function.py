@@ -89,11 +89,11 @@ def search_user(platform, id):
 
         # 각 플랫폼에서 sql 조건에 해당하는 id 전부 가져오기
         id_list = curs.fetchall()
-        
+
         # 같은 플랫폼 테이블 조인시 자기 자신은 제외
         if (platform == other_platform):
             id_list = list(id_list)
-            id_list.remove((id,))
+            id_list.remove((str(id),))
             id_list = tuple(id_list)
         
         # 아이디 리스트에서 하나씩 뽑으면서 조회
@@ -105,14 +105,14 @@ def search_user(platform, id):
 
 
 if __name__ == "__main__":
-    # insert_data("facebook", (24, "마", "남자", 29, "http://", "마", "파리", "2019-11-17", "2019-11-19", "#테스트, #테스트2", "state?", "기존", 1))
+    # insert_data("facebook", ("24", "마", "남자", 29, "http://", "마", "파리", "2019-11-17", "2019-11-19", "#테스트, #테스트2", "state?", "기존", 1))
     
     
-    # insert_id_data("telegram", (2, "lee"))
+    # insert_id_data("telegram", ("2", "lee"))
     # search_data("telegram")
-    # update_data("telegram", "user_state", 'new_member', 2)
+    # update_data("telegram", "user_state", 'new_member', "2")
 
-    users = search_user("facebook", 24)
+    users = search_user("facebook", '24')
     print(users)
 
     conn.close()
