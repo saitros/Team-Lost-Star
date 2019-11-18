@@ -68,6 +68,17 @@ def update_data(platform, column, data, id):
     curs.execute(sql, (data, id))
     conn.commit()
 
+def my_kakao_user_search(id):
+    mydata = search_data("kakaotalk",'*',id)
+    print(mydata[0][7])
+    print(mydata[0][8])
+    print(mydata[0][9])
+    
+    sql = "select * from kakaotalk_user_tb where city = '{}' and (start_date < {} or end_date>{})".format(mydata[0][7],mydata[0][8],mydata[0][9])
+    curs.execute(sql)
+    rows = curs.fetchall()
+
+    return rows
 
 # 동행 유저 검색
 def search_user(platform, id):
@@ -126,8 +137,12 @@ if __name__ == "__main__":
     # insert_id_data("kakaotalk",(5,"New","New",0))
     
     # insert_id_data("telegram", (2, "lee"))
-    search_data("kakaotalk","open_cnt","f65ae1aabf7764aa7b18af50c25fe526eee49ee90c55433401616f448e28aa5e6d",1)
-    update_data("kakaotalk", "user_state", 'Existing', user_id)
+    temp = my_kakao_user_search("test1")
+    print("==================")
+    print(temp[0][2])
+
+    
+    # update_data("kakaotalk", "user_state", 'Existing', user_id)
     # is_user_new('kakaotalk',"f65ae1a1616f448e28aa5e6d")
     # users = search_user("facebook", 24)
     # print(users)
