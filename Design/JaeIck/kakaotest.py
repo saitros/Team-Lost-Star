@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 import sys
 import SQL_function
 app = Flask(__name__)
+IDDB = {}
 USERINFO = {"USER1":{'IsNew':'Existing','Flag': 5,'KakaoID':'user1', 'Sex': '여자', 'Age': '25', 'Country': '스페인', 'City': '바르셀로나', 'Date': '191115~191118','Photo':'http://dn-m.talk.kakao.com/talkm/bl3pyYUSIOW/7W4dKnjongiKIxu3XkIGf0/i_4z0ltufqhvph1.jpeg'},
             "USER2":{'IsNew':'Existing','Flag': 5,'KakaoID':'user2', 'Sex': '남자', 'Age': '22', 'Country': '스페인', 'City': '바르셀로나', 'Date': '191115~191118','Photo':'http://dn-m.talk.kakao.com/talkm/bl3pyUdR9s1/Gr6VQYRpAdR5UY17uo6u61/i_djwoz2tu3ln6.jpeg'}}
 #flag 0 = ID만등록된상황
@@ -170,7 +171,7 @@ def UserDateDataGet():
     SQL_function.update_data("kakaotalk","end_date",user_answer[7:],user_id)
     
     return 0
-def UserShow():
+def UserShow(id,DB):
     #USER정보 같은사람을 따로 추출하여 DB화하는 작업은 여기에 들어가야함
     message = {
                 "version": "2.0",
@@ -180,49 +181,7 @@ def UserShow():
                         "carousel": {
                         "type": "basicCard",
                         "items": [
-                            {
-                            "description": "성별 : {}\n나이 : {}\n여행지역 : {}\n여행날짜 : {}".format(USERINFO['USER1']['Sex'],USERINFO['USER1']['Age'],(USERINFO['USER1']['Country']+' '+USERINFO['USER1']['City']),USERINFO['USER1']['Date']),
-                            "thumbnail": {
-                                "imageUrl": "{}".format(USERINFO['USER1']['Photo'])
-                            },
-                            "buttons": [
-                                {
-                                "action": "webLink",
-                                "label": "프로필사진 크게보기",
-                                "webLinkUrl" : "{}".format(USERINFO['USER1']['Photo'])
-                                
-                                },
-                                {
-                                "action": "message",
-                                "label": "이사람이 좋아! 연락처 줘",
-                                "messageText" : "이사람이 좋아! 연락처 줘"
-                                
-                                }
-
-
-                            ]
-                            },
-                            {
-                            "description": "성별 : {}\n나이 : {}\n여행지역 : {}\n여행날짜 : {}".format(USERINFO['USER2']['Sex'],USERINFO['USER2']['Age'],(USERINFO['USER2']['Country']+' '+USERINFO['USER2']['City']),USERINFO['USER2']['Date']),
-                            "thumbnail": {
-                                "imageUrl": "{}".format(USERINFO['USER2']['Photo'])
-                            },
-                            "buttons": [
-                                {
-                                "action": "webLink",
-                                "label": "프로필사진 크게보기",
-                                "webLinkUrl" : "{}".format(USERINFO['USER2']['Photo'])
-                                
-                                },
-                                {
-                                "action": "message",
-                                "label": "이사람이 좋아!! 연락처 줘 ",                                
-                                "messageText" : "이사람이 좋아!! 연락처 줘 "
-                                
-                                }
-                                
-                            ]
-                            },
+                            
                             
                         ]
                         }
@@ -230,6 +189,35 @@ def UserShow():
                     ]
                 }
                 }
+    num = 0
+    IDDB[id] = {}
+    for i in DB:
+        buttons = {
+                            "description": "성별 : {}\n나이 : {}\n여행지역 : {}\n여행날짜 : {}\n어필태그 : {}".format(i[2],i[3],(i[6]+' '+i[7]),(i[8]+'~'+i[9]),i[10]),
+                            "thumbnail": {
+                                "imageUrl": "{}".format(i[4])
+                            },
+                            "buttons": [
+                                {
+                                "action": "webLink",
+                                "label": "프로필사진 크게보기",
+                                "webLinkUrl" : "{}".format(i[4])
+                                
+                                },
+                                {
+                                "action": "message",
+                                "label": "이사람이 좋아! 연락처 줘",
+                                "messageText" : "이사람이 좋아"+"!"*num +" 연락처 줘"
+                                
+                                }
+
+
+                            ]
+                    }
+        IDDB[id][num]=i[5]
+        num+=1
+        message["template"]["outputs"][0]["carousel"]["items"].append(buttons)
+    
     return message
 
 @app.route('/IsUserNew', methods=['POST'])
@@ -377,7 +365,11 @@ def IsUserNew():
     
     #기존회원의 경우 기존의 정보로 찾아달라고 하기
     elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","user_state",user_id,1)[0] == "Existing" and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0] == "done" and answer =="응":
-        message = UserShow()
+        DB = SQL_function.my_kakao_user_search(user_id)
+        if DB is False:
+            message = Send_Button("미안해 동행이 가능한 사람이 없는거 같아..","처음으로","정보 수정할래")
+        else:
+            message = UserShow(user_id,DB)
     
     
     elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","user_state",user_id,1)[0] == "Existing" and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0] == "done" and answer =="동행 찾아볼래!":
@@ -386,27 +378,96 @@ def IsUserNew():
     elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","user_state",user_id,1)[0] == "Existing" and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0] == "done" and answer =="정보 수정할래":
         message = Change_Button()
 
+    elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0] == "done" and answer == "이사람이 좋아 연락처 줘" :
+        num = SQL_function.search_data("kakaotalk","open_cnt",user_id,1)[0]
+        if num < 3:
+            SQL_function.update_data("kakaotalk","open_cnt",num+1,user_id)
+            message = send_message("카카오톡 ID : {}".format(IDDB[user_id][0]))
+        elif num >= 3:
+            message = send_message("금일 검색가능한 횟수를 초과했어! 더 알고싶으면 결제를 해야해")
+
+    elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0] == "done" and answer == "이사람이 좋아! 연락처 줘" :
+        num = SQL_function.search_data("kakaotalk","open_cnt",user_id,1)[0]
+        if num < 3:
+            SQL_function.update_data("kakaotalk","open_cnt",num+1,user_id)
+            message = send_message("카카오톡 ID : {}".format(IDDB[user_id][1]))
+        elif num >= 3:
+            message = send_message("금일 검색가능한 횟수를 초과했어! 더 알고싶으면 결제를 해야해")
+        
+        
+    elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0] == 'done' and answer == "이사람이 좋아!! 연락처 줘" :
+        num = SQL_function.search_data("kakaotalk","open_cnt",user_id,1)[0]
+        if num < 3:
+            SQL_function.update_data("kakaotalk","open_cnt",num+1,user_id)
+            message = send_message("카카오톡 ID : {}".format(IDDB[user_id][2]))
+        elif num >=3:
+            message = send_message("금일 검색가능한 횟수를 초과했어! 더 알고싶으면 결제를 해야해")
+
+    elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0] == "done" and answer == "이사람이 좋아!!! 연락처 줘" :
+        num = SQL_function.search_data("kakaotalk","open_cnt",user_id,1)[0]
+        if num < 3:
+            SQL_function.update_data("kakaotalk","open_cnt",num+1,user_id)
+            message = send_message("카카오톡 ID : {}".format(IDDB[user_id][3]))
+        elif num >= 3:
+            message = send_message("금일 검색가능한 횟수를 초과했어! 더 알고싶으면 결제를 해야해")
+    elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0] == "done" and answer == "이사람이 좋아!!!! 연락처 줘" :
+        num = SQL_function.search_data("kakaotalk","open_cnt",user_id,1)[0]
+        if num < 3:
+            SQL_function.update_data("kakaotalk","open_cnt",num+1,user_id)
+            message = send_message("카카오톡 ID : {}".format(IDDB[user_id][4]))
+        elif num >= 3:
+            message = send_message("금일 검색가능한 횟수를 초과했어! 더 알고싶으면 결제를 해야해")
+    elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0] == "done" and answer == "이사람이 좋아!!!!! 연락처 줘" :
+        num = SQL_function.search_data("kakaotalk","open_cnt",user_id,1)[0]
+        if num < 3:
+            SQL_function.update_data("kakaotalk","open_cnt",num+1,user_id)
+            message = send_message("카카오톡 ID : {}".format(IDDB[user_id][5]))
+        elif num >= 3:
+            message = send_message("금일 검색가능한 횟수를 초과했어! 더 알고싶으면 결제를 해야해")
     
-    # 수정필요
-    # elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0] == "done" and answer == "이사람이 좋아! 연락처 줘" :
-    #     if USERINFO[user_id]['SearchTimes']<3:
-    #         USERINFO[user_id]['SearchTimes']+=1
-    #         message = send_message("카카오톡 ID : {}".format(USERINFO['USER1']['KakaoID']))
-    #     elif USERINFO[user_id]['SearchTimes']>=3:
-    #         message = send_message("금일 검색가능한 횟수를 초과했어! 더 알고싶으면 결제를 해야해")
-        
-        
-    # elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0] == 'done' and answer == "이사람이 좋아!! 연락처 줘" and SQL_function.search_data("kakaotalk","open_cnt",user_id,1) < 3:
-    #     num = SQL_function.search_data("kakaotalk","open_cnt",user_id,1)
-    #     if SQL_function.search_data("kakaotalk","open_cnt",user_id,1) < 3:
-    #         SQL_function.update_data("kakaotalk","open_cnt",num+1,user_id)
-    #         message = send_message("카카오톡 ID : {}".format(USERINFO['USER2']['KakaoID']))
-    #     elif SQL_function.search_data("kakaotalk","open_cnt",user_id,1) >=3:
-    #         message = send_message("금일 검색가능한 횟수를 초과했어! 더 알고싶으면 결제를 해야해")
-        
+    elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0] == "done" and answer == "이사람이 좋아!!!!!! 연락처 줘" :
+        num = SQL_function.search_data("kakaotalk","open_cnt",user_id,1)[0]
+        if num < 3:
+            SQL_function.update_data("kakaotalk","open_cnt",num+1,user_id)
+            message = send_message("카카오톡 ID : {}".format(IDDB[user_id][6]))
+        elif num >= 3:
+            message = send_message("금일 검색가능한 횟수를 초과했어! 더 알고싶으면 결제를 해야해")
+    
+    elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0] == "done" and answer == "이사람이 좋아!!!!!!! 연락처 줘" :
+        num = SQL_function.search_data("kakaotalk","open_cnt",user_id,1)[0]
+        if num < 3:
+            SQL_function.update_data("kakaotalk","open_cnt",num+1,user_id)
+            message = send_message("카카오톡 ID : {}".format(IDDB[user_id][7]))
+        elif num >= 3:
+            message = send_message("금일 검색가능한 횟수를 초과했어! 더 알고싶으면 결제를 해야해")
+    elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0] == "done" and answer == "이사람이 좋아!!!!!!!! 연락처 줘" :
+        num = SQL_function.search_data("kakaotalk","open_cnt",user_id,1)[0]
+        if num < 3:
+            SQL_function.update_data("kakaotalk","open_cnt",num+1,user_id)
+            message = send_message("카카오톡 ID : {}".format(IDDB[user_id][8]))
+        elif num >= 3:
+            message = send_message("금일 검색가능한 횟수를 초과했어! 더 알고싶으면 결제를 해야해")
+    elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0] == "done" and answer == "이사람이 좋아!!!!!!!!! 연락처 줘" :
+        num = SQL_function.search_data("kakaotalk","open_cnt",user_id,1)[0]
+        if num < 3:
+            SQL_function.update_data("kakaotalk","open_cnt",num+1,user_id)
+            message = send_message("카카오톡 ID : {}".format(IDDB[user_id][9]))
+        elif num >= 3:
+            message = send_message("금일 검색가능한 횟수를 초과했어! 더 알고싶으면 결제를 해야해")
+    
+    elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0] == "done" and answer == "이사람이 좋아!!!!!!!!!! 연락처 줘" :
+        num = SQL_function.search_data("kakaotalk","open_cnt",user_id,1)[0]
+        if num < 3:
+            SQL_function.update_data("kakaotalk","open_cnt",num+1,user_id)
+            message = send_message("카카오톡 ID : {}".format(IDDB[user_id][10]))
+        elif num >= 3:
+            message = send_message("금일 검색가능한 횟수를 초과했어! 더 알고싶으면 결제를 해야해")
+    
     else:
         message = send_message("미안해 잘 못알아들었어! 다시 말해줄래?")
+
     return jsonify(message)
+
 
 
 

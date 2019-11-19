@@ -54,9 +54,7 @@ def search_data(platform, column = "*", id = "NULL", opt = 0):
         rows = curs.fetchone()
     
     try:
-        print(rows[0])
-        print(type(rows[0]))
-
+        pass
     except:
         return False
 
@@ -68,17 +66,21 @@ def update_data(platform, column, data, id):
     curs.execute(sql, (data, id))
     conn.commit()
 
+#카카오톡에서만 유저검색
 def my_kakao_user_search(id):
     mydata = search_data("kakaotalk",'*',id)
     print(mydata[0][7])
     print(mydata[0][8])
     print(mydata[0][9])
     
-    sql = "select * from kakaotalk_user_tb where city = '{}' and (start_date < {} or end_date>{})".format(mydata[0][7],mydata[0][8],mydata[0][9])
+    sql = "select * from kakaotalk_user_tb where city = '{}' and (start_date <= {} or end_date >= {}) and id != '{}'".format(mydata[0][7],mydata[0][8],mydata[0][9],id)
     curs.execute(sql)
     rows = curs.fetchall()
-
-    return rows
+    #없으면 False 를 반환
+    if len(rows) == 0:
+        return False
+    else:
+        return rows
 
 # 동행 유저 검색
 def search_user(platform, id):
@@ -139,7 +141,7 @@ if __name__ == "__main__":
     # insert_id_data("telegram", (2, "lee"))
     temp = my_kakao_user_search("test1")
     print("==================")
-    print(temp[0][2])
+    print(temp[0])
 
     
     # update_data("kakaotalk", "user_state", 'Existing', user_id)
