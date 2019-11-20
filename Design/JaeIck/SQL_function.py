@@ -14,7 +14,7 @@ def is_user_new(platform,user_id):
 # id 데이터 삽입
 def insert_id_data(platform, data):
     
-    sql = "insert into {platform}_user_tb(id,dialog_state,user_state,open_cnt) values (%s, %s,%s,%s)".format(platform=platform)
+    sql = "insert into {platform}_user_tb(id,dialog_state,user_state,open_cnt,show_count) values (%s, %s,%s,%s,%s)".format(platform=platform)
     curs.execute(sql, data)
     conn.commit()
 
@@ -130,7 +130,7 @@ def search_user(platform, id):
         
         # 아이디 리스트에서 하나씩 뽑으면서 조회
         for item in id_list:
-            info = search_data(other_platform, "user_id,profile_image, sex, age,country, city, start_date, end_date, appeal_tag", item)
+            info = search_data(other_platform, "sex, age,country, city,profile_image ,start_date, end_date, appeal_tag,kakao_id", item)
             info = list(info[0])
             trip_users.append(info)
 
@@ -160,8 +160,9 @@ if __name__ == "__main__":
     
     # insert_id_data("telegram", (2, "lee"))
     su = search_user("kakaotalk","f65ae1aabf7764aa7b18af50c25fe526eee49ee90c55433401616f448e28aa5e6d")
-    print(su)
-
+    # su = search_data('kakaotalk','show_count','4d3d473a6eade2e478f23568ce920972b5a5ea726b128403e972865097f23c2c48',1)
+    print(len(su))
+    
     
     # update_data("kakaotalk", "user_state", 'Existing', user_id)
     # is_user_new('kakaotalk',"f65ae1a1616f448e28aa5e6d")
