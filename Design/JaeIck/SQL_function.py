@@ -130,10 +130,28 @@ def search_user(platform, id):
         
         # 아이디 리스트에서 하나씩 뽑으면서 조회
         for item in id_list:
-            info = search_data(other_platform, "user_id, sex, age, city, start_date, end_date", item)
-            trip_users.append(info[0])
+            info = search_data(other_platform, "user_id,profile_image, sex, age,country, city, start_date, end_date, appeal_tag", item)
+            info = list(info[0])
+            trip_users.append(info)
+
+            # if other_platform == "facebook":
+            #     info = search_data(other_platform, "id, profile_image,sex, age,country, city, start_date, end_date, appeal_tag", item)
+            #     info = list(info[0])
+            #     info[0] = "f" + info[0]
+            #     trip_users.append(info)
+            # elif other_platform == "kakaotalk":
+            #     info = search_data(other_platform, "id,profile_image, sex, age,country, city, start_date, end_date, appeal_tag", item)
+            #     info = list(info[0])
+            #     info[0] = "k" + info[0]
+            #     trip_users.append(info)
+            # elif other_platform == "telegram":
+            #     info = search_data(other_platform, "id,profile_image, sex, age,country, city, start_date, end_date, appeal_tag", item)
+            #     info = list(info[0])
+            #     info[0] = "t" + info[0]
+            #     trip_users.append(info)
     
     return trip_users
+
 
 
 if __name__ == "__main__":
@@ -141,9 +159,8 @@ if __name__ == "__main__":
     # insert_id_data("kakaotalk",(5,"New","New",0))
     
     # insert_id_data("telegram", (2, "lee"))
-    search_data("kakaotalk","id","a",1)
-    print("==================")
-    
+    su = search_user("kakaotalk","f65ae1aabf7764aa7b18af50c25fe526eee49ee90c55433401616f448e28aa5e6d")
+    print(su)
 
     
     # update_data("kakaotalk", "user_state", 'Existing', user_id)

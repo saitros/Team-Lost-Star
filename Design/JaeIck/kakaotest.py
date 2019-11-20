@@ -453,8 +453,10 @@ def IsUserNew():
     
     #기존회원의 경우 기존의 정보로 찾아달라고 하기
     elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","user_state",user_id,1)[0] == "Existing" and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0] == "done" and answer =="응":
-        DB = SQL_function.my_kakao_user_search(user_id)
-        if DB is False:
+        # DB = SQL_function.my_kakao_user_search(user_id)
+        # if DB is False:
+        DB = SQL_function.search_user("kakaotalk",user_id)
+        if len(DB) == 0:
             message = Send_Button("미안해 동행이 가능한 사람이 없는거 같아..","처음으로","정보 수정할래")
         else:
             message = UserShow(user_id,DB)
