@@ -9,7 +9,7 @@ def CheckCityName(input_city):
     # 한국어 -> 영어 번역
     translator = Translator()
     en_city = translator.translate(str(input_city), src='ko', dest='en').text
-    print(en_city)
+
     # 구글 Place API를 통해 도시 정확도 체크
     url = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input={en_city}&key={API_KEY}".format(en_city=en_city,API_KEY=API_KEY)
     
@@ -39,8 +39,8 @@ def CheckCityName(input_city):
 
 
 if __name__ == "__main__":
-    city = CheckCityName("바르쏄로나")
-    print(city)
+    city = CheckCityName("바르셀로나")
+    print(type(city))
     if city is False:
         print("입력한 도시 이름을 확인해주세요\n")
     else:

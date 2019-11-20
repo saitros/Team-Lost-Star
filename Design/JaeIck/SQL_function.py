@@ -5,10 +5,10 @@ curs = conn.cursor()
 
 def is_user_new(platform,user_id):
     if (search_data(platform,"id",user_id,1)) is False:
-        print("신규유저")
+        # print("신규유저")
         return True
     else: 
-        print("기존유저")
+        # print("기존유저")
         return False
 
 # id 데이터 삽입
@@ -47,18 +47,20 @@ def search_data(platform, column = "*", id = "NULL", opt = 0):
         curs.execute(sql, id)
     else:
         curs.execute(sql)
-
+    
     if (opt == 0):    
         rows = curs.fetchall()
     else:
         rows = curs.fetchone()
-    
+        
     try:
-        pass
+        if len(rows) != 0:
+            # print("정보있음")
+            # print(rows)
+            return rows
     except:
+        # print("정보없음")
         return False
-
-    return rows
 
 # 데이터 업데이트
 def update_data(platform, column, data, id):
@@ -73,7 +75,7 @@ def my_kakao_user_search(id):
     print(mydata[0][8])
     print(mydata[0][9])
     
-    sql = "select * from kakaotalk_user_tb where city = '{}' and (start_date <= {} or end_date >= {}) and id != '{}'".format(mydata[0][7],mydata[0][8],mydata[0][9],id)
+    sql = "select * from kakaotalk_user_tb where city = '{}' and (start_date >= {} or end_date <= {}) and id != '{}'".format(mydata[0][7],mydata[0][8],mydata[0][9],id)
     curs.execute(sql)
     rows = curs.fetchall()
     #없으면 False 를 반환
@@ -139,9 +141,9 @@ if __name__ == "__main__":
     # insert_id_data("kakaotalk",(5,"New","New",0))
     
     # insert_id_data("telegram", (2, "lee"))
-    temp = my_kakao_user_search("test1")
+    search_data("kakaotalk","id","a",1)
     print("==================")
-    print(temp[0])
+    
 
     
     # update_data("kakaotalk", "user_state", 'Existing', user_id)

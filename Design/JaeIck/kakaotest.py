@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 import sys
 import SQL_function
+import CheckInput
 app = Flask(__name__)
 IDDB = {}
 USERINFO = {"USER1":{'IsNew':'Existing','Flag': 5,'KakaoID':'user1', 'Sex': '여자', 'Age': '25', 'Country': '스페인', 'City': '바르셀로나', 'Date': '191115~191118','Photo':'http://dn-m.talk.kakao.com/talkm/bl3pyYUSIOW/7W4dKnjongiKIxu3XkIGf0/i_4z0ltufqhvph1.jpeg'},
@@ -163,6 +164,10 @@ def UserDataGet(VarName):
     
     return 0
 
+def UserLocDataGet(VarName,id,answer):
+    SQL_function.update_data("kakaotalk","{}".format(VarName),answer,id)
+    return 0
+    
 def UserDateDataGet():
     content = request.get_json()
     user_id = content['userRequest']['user']['id']
@@ -193,7 +198,7 @@ def UserShow(id,DB):
     IDDB[id] = {}
     for i in DB:
         buttons = {
-                            "description": "성별 : {}\n나이 : {}\n여행지역 : {}\n여행날짜 : {}\n어필태그 : {}".format(i[2],i[3],(i[6]+' '+i[7]),(i[8]+'~'+i[9]),i[10]),
+                            "description": "성별 : {}  나이 : {}\n여행지역 : {}\n여행날짜 : {}\n어필태그 : {}".format(i[2],i[3],(i[6]+' '+i[7]),(i[8]+'~'+i[9]),i[10]),
                             "thumbnail": {
                                 "imageUrl": "{}".format(i[4])
                             },
@@ -220,7 +225,7 @@ def UserShow(id,DB):
     
     return message
 
-@app.route('/IsUserNew', methods=['POST'])
+@app.route('/GoTogether', methods=['POST'])
 def IsUserNew():
     content = request.get_json()
     user_id = content['userRequest']['user']['id']
@@ -256,17 +261,58 @@ def IsUserNew():
     
     #신규회원 여행국가묻기
     elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","user_state",user_id,1)[0]=='new' and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0]=='country':
+        a = CheckInput.CheckCityName(answer)
+        print("여기는 kakaotest")
+        print(a)
+        if a is False:
+            SQL_function.update_data("kakaotalk","dialog_state","country",user_id)
+            message = send_message("입력한게 오타가 있거나 지역이름이 아닌거 같아. 다시 입력해줄래?")
+        else:
+            SQL_function.update_data("kakaotalk","dialog_state","countrycheck",user_id)
+            UserLocDataGet("country",user_id,a)
+            message = Send_Button("{} 여행하는거 맞아?".format(SQL_function.search_data("kakaotalk","country",user_id,1)[0]),"응","오타났나봐")
+
+        
+        # SQL_function.update_data("kakaotalk","dialog_state","countrycheck",user_id)
+        
+        # UserDataGet('country')
+        
+        # message = Send_Button("{} 여행하는거 맞아?".format(SQL_function.search_data("kakaotalk","country",user_id,1)[0]),"응","오타났나봐")
+        
+    elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","user_state",user_id,1)[0]=='new' and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0]=='countrycheck' and answer == "응":
         SQL_function.update_data("kakaotalk","dialog_state","city",user_id)
-        UserDataGet('country')
         message = send_message("{} 여행하는구나! 여행하는 도시는 어디야? ".format(SQL_function.search_data("kakaotalk","country",user_id,1)[0]))
-    
+
+    elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","user_state",user_id,1)[0]=='new' and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0]=='countrycheck' and answer == "오타났나봐":
+        SQL_function.update_data("kakaotalk","dialog_state","country",user_id)
+        message = send_message("여행하는 나라를 다시 입력해줘")
+
     #신규회원 여행도시묻기
     elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","user_state",user_id,1)[0]=='new' and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0]=='city':
-        SQL_function.update_data("kakaotalk","dialog_state","date",user_id)
-        UserDataGet('city')
-        
-        message = send_message("{} 여행하는구나! 여행날짜도 좀 적어줘! ex)191114~191117  ".format(SQL_function.search_data("kakaotalk","city",user_id,1)[0]))
+        a = CheckInput.CheckCityName(answer)
+        print(a)
+        if a is False:
+            SQL_function.update_data("kakaotalk","dialog_state","city",user_id)
+            message = send_message("입력한게 오타가 있거나 지역이름이 아닌거 같아. 다시 입력해줄래?")
+        else:
+            SQL_function.update_data("kakaotalk","dialog_state","citycheck",user_id)
+            UserLocDataGet("city",user_id,a)
+            message = Send_Button("{} 여행하는거 맞아?".format(SQL_function.search_data("kakaotalk","city",user_id,1)[0]),"응","오타났나봐")
+
+       
+        # SQL_function.update_data("kakaotalk","dialog_state","citycheck",user_id)
+        # UserDataGet('city')
+        # message = Send_Button("{} 여행하는거 맞아?".format(SQL_function.search_data("kakaotalk","city",user_id,1)[0]),"응","오타났나봐")
     
+    elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","user_state",user_id,1)[0]=='new' and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0]=='citycheck' and answer == "응":
+        SQL_function.update_data("kakaotalk","dialog_state","date",user_id)
+        message = send_message("{} 여행하는구나! 여행날짜를 알려줘! Ex) 191125~191128  ".format(SQL_function.search_data("kakaotalk","city",user_id,1)[0]))
+
+    elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","user_state",user_id,1)[0]=='new' and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0]=='citycheck' and answer == "오타났나봐":
+        SQL_function.update_data("kakaotalk","dialog_state","city",user_id)
+        message = send_message("여행하는 도시를 다시 입력해줘")
+
+     
     #신규회원 여행기간 묻기
     elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","user_state",user_id,1)[0]=='new' and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0]=='date':
         SQL_function.update_data("kakaotalk","dialog_state","profile_image",user_id)
@@ -278,12 +324,20 @@ def IsUserNew():
         SQL_function.update_data("kakaotalk","dialog_state","kakao_id",user_id)
         UserDataGet('profile_image')
         message = send_message("그럼 다른 사람이 너에게 연락할 수 있도록 카카오톡 ID를 알려줄래?")
-    
-    #신규회원 어필태그작성
+
+    #신규회원 카톡아이디 받기
     elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","user_state",user_id,1)[0]=='new' and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0]=='kakao_id':
-        SQL_function.update_data("kakaotalk","dialog_state","appeal_tag",user_id)
+        SQL_function.update_data("kakaotalk","dialog_state","kakao_idcheck",user_id)
         UserDataGet("kakao_id")
+        message = Send_Button("{}이 너의 카카오톡 아이디가 맞아?".format(SQL_function.search_data("kakaotalk","kakao_id",user_id,1)[0]),"응","오타났나봐")
+    
+    elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","user_state",user_id,1)[0]=='new' and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0]=='kakao_idcheck' and answer == "응":
+        SQL_function.update_data("kakaotalk","dialog_state","appeal_tag",user_id)
         message = send_message("마지막으로 너를 어필하는 태그들을 작성해봐 ex)#먹방 #잠만보")
+
+    elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","user_state",user_id,1)[0]=='new' and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0]=='kakao_idcheck' and answer == "오타났나봐":
+        SQL_function.update_data("kakaotalk","dialog_state","kakao_id",user_id)
+        message = send_message("카카오톡 아이디 다시 알려줄래?")
 
     #신규회원이 자신의 정보를 모두 입력하는 순간 기존회원으로 등업이된다
     elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","user_state",user_id,1)[0]=='new' and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0]=='appeal_tag':
@@ -327,7 +381,7 @@ def IsUserNew():
     elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","user_state",user_id,1)[0] == "Existing" and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0] == "date":
         SQL_function.update_data("kakaotalk", "dialog_state", "done", user_id)
         UserDateDataGet()
-        message = UserProfile_Button("수정이 완료된 정보를 확인해봐\n성별 : {}\n나이 : {}\n여행지 : {}\n여행날짜 : {}\n어필태그 : {}\n같은 정보로 찾아줄까?".format(SQL_function.search_data("kakaotalk","sex",user_id,1)[0],SQL_function.search_data("kakaotalk","age",user_id,1)[0],(SQL_function.search_data("kakaotalk","country",user_id,1)[0]+' '+SQL_function.search_data("kakaotalk","city",user_id,1)[0]),(SQL_function.search_data("kakaotalk","start_date",user_id,1)[0] + '~'+SQL_function.search_data("kakaotalk","end_date",user_id,1)[0]),SQL_function.search_data("kakaotalk","appeal_tag",user_id,1)[0]),user_id,"응","정보 수정할래","내 프로필 사진 볼래")
+        message = UserProfile_Button("수정이 완료된 정보를 확인해봐\n성별 : {}  나이 : {}\n여행지 : {}\n여행날짜 : {}\n어필태그 : {}\n같은 정보로 찾아줄까?".format(SQL_function.search_data("kakaotalk","sex",user_id,1)[0],SQL_function.search_data("kakaotalk","age",user_id,1)[0],(SQL_function.search_data("kakaotalk","country",user_id,1)[0]+' '+SQL_function.search_data("kakaotalk","city",user_id,1)[0]),(SQL_function.search_data("kakaotalk","start_date",user_id,1)[0] + '~'+SQL_function.search_data("kakaotalk","end_date",user_id,1)[0]),SQL_function.search_data("kakaotalk","appeal_tag",user_id,1)[0]),user_id,"응","정보 수정할래","내 프로필 사진 볼래")
 
     #기존회원 프로필사진 수정 FLOW
     elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","user_state",user_id,1)[0] == "Existing" and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0] == "done" and answer == "프로필사진 수정할래":
@@ -337,7 +391,7 @@ def IsUserNew():
     elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","user_state",user_id,1)[0] == "Existing" and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0] == "profile_image":
         SQL_function.update_data("kakaotalk", "dialog_state", "done", user_id)
         UserDataGet('profile_image')
-        message = UserProfile_Button("수정이 완료된 정보를 확인해봐\n성별 : {}\n나이 : {}\n여행지 : {}\n여행날짜 : {}\n어필태그 : {}\n같은 정보로 찾아줄까?".format(SQL_function.search_data("kakaotalk","sex",user_id,1)[0],SQL_function.search_data("kakaotalk","age",user_id,1)[0],(SQL_function.search_data("kakaotalk","country",user_id,1)[0]+' '+SQL_function.search_data("kakaotalk","city",user_id,1)[0]),(SQL_function.search_data("kakaotalk","start_date",user_id,1)[0] + '~'+SQL_function.search_data("kakaotalk","end_date",user_id,1)[0]),SQL_function.search_data("kakaotalk","appeal_tag",user_id,1)[0]),user_id,"응","정보 수정할래","내 프로필 사진 볼래")
+        message = UserProfile_Button("수정이 완료된 정보를 확인해봐\n성별 : {}  나이 : {}\n여행지 : {}\n여행날짜 : {}\n어필태그 : {}\n같은 정보로 찾아줄까?".format(SQL_function.search_data("kakaotalk","sex",user_id,1)[0],SQL_function.search_data("kakaotalk","age",user_id,1)[0],(SQL_function.search_data("kakaotalk","country",user_id,1)[0]+' '+SQL_function.search_data("kakaotalk","city",user_id,1)[0]),(SQL_function.search_data("kakaotalk","start_date",user_id,1)[0] + '~'+SQL_function.search_data("kakaotalk","end_date",user_id,1)[0]),SQL_function.search_data("kakaotalk","appeal_tag",user_id,1)[0]),user_id,"응","정보 수정할래","내 프로필 사진 볼래")
     
     #기존회원 어필태그 수정 FLOW
     elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","user_state",user_id,1)[0] == "Existing" and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0] == "done" and answer == "어필 태그 수정할래":
@@ -347,20 +401,54 @@ def IsUserNew():
     elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","user_state",user_id,1)[0] == "Existing" and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0] == "appeal_tag":
         SQL_function.update_data("kakaotalk", "dialog_state", "done", user_id)
         UserDataGet('appeal_tag')
-        message = UserProfile_Button("수정이 완료된 정보를 확인해봐\n성별 : {}\n나이 : {}\n여행지 : {}\n여행날짜 : {}\n어필태그 : {}\n같은 정보로 찾아줄까?".format(SQL_function.search_data("kakaotalk","sex",user_id,1)[0],SQL_function.search_data("kakaotalk","age",user_id,1)[0],(SQL_function.search_data("kakaotalk","country",user_id,1)[0]+' '+SQL_function.search_data("kakaotalk","city",user_id,1)[0]),(SQL_function.search_data("kakaotalk","start_date",user_id,1)[0] + '~'+SQL_function.search_data("kakaotalk","end_date",user_id,1)[0]),SQL_function.search_data("kakaotalk","appeal_tag",user_id,1)[0]),user_id,"응","정보 수정할래","내 프로필 사진 볼래")
+        message = UserProfile_Button("수정이 완료된 정보를 확인해봐\n성별 : {}  나이 : {}\n여행지 : {}\n여행날짜 : {}\n어필태그 : {}\n같은 정보로 찾아줄까?".format(SQL_function.search_data("kakaotalk","sex",user_id,1)[0],SQL_function.search_data("kakaotalk","age",user_id,1)[0],(SQL_function.search_data("kakaotalk","country",user_id,1)[0]+' '+SQL_function.search_data("kakaotalk","city",user_id,1)[0]),(SQL_function.search_data("kakaotalk","start_date",user_id,1)[0] + '~'+SQL_function.search_data("kakaotalk","end_date",user_id,1)[0]),SQL_function.search_data("kakaotalk","appeal_tag",user_id,1)[0]),user_id,"응","정보 수정할래","내 프로필 사진 볼래")
 
     #기존회원 여행지 수정 FLOW
-    elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","user_state",user_id,1)[0] == "Existing" and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0] == "done" and answer == "여행지 수정할래":
-        SQL_function.update_data("kakaotalk", "dialog_state", "country", user_id)
+    elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","user_state",user_id,1)[0]=='Existing' and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0] == "done" and answer == "여행지 수정할래":
+        SQL_function.update_data("kakaotalk","dialog_state","country",user_id)
         message = send_message("알겠어! 여행하는 나라이름 알려줘!")
-    elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","user_state",user_id,1)[0] == "Existing" and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0] == "country":
-        SQL_function.update_data("kakaotalk", "dialog_state", "city", user_id)
-        UserDataGet('country')
-        message = send_message("여행하는 도시는 어디야?")
+
+    elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","user_state",user_id,1)[0]=='Existing' and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0]=='country' :
+        
+        a = CheckInput.CheckCityName(answer)
+        print("여기는 kakaotest")
+        print(a)
+        if a is False:
+            SQL_function.update_data("kakaotalk","dialog_state","country",user_id)
+            message = send_message("입력한게 오타가 있거나 지역이름이 아닌거 같아. 다시 입력해줄래?")
+        else:
+            SQL_function.update_data("kakaotalk","dialog_state","countrycheck",user_id)
+            UserLocDataGet("country",user_id,a)
+            message = Send_Button("{} 여행하는거 맞아?".format(SQL_function.search_data("kakaotalk","country",user_id,1)[0]),"응","오타났나봐")
+
+        
+    elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","user_state",user_id,1)[0]=='Existing' and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0]=='countrycheck' and answer == "응":
+        SQL_function.update_data("kakaotalk","dialog_state","city",user_id)
+        message = send_message("{} 여행하는구나! 여행하는 도시는 어디야? ".format(SQL_function.search_data("kakaotalk","country",user_id,1)[0]))
+
+    elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","user_state",user_id,1)[0]=='Existing' and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0]=='countrycheck' and answer == "오타났나봐":
+        SQL_function.update_data("kakaotalk","dialog_state","country",user_id)
+        message = send_message("여행하는 나라를 다시 입력해줘")
+
     elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","user_state",user_id,1)[0] == "Existing" and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0] == "city":
-        SQL_function.update_data("kakaotalk", "dialog_state", "done", user_id)
-        UserDataGet('city')
-        message = UserProfile_Button("수정이 완료된 정보를 확인해봐\n성별 : {}\n나이 : {}\n여행지 : {}\n여행날짜 : {}\n어필태그 : {}\n같은 정보로 찾아줄까?".format(SQL_function.search_data("kakaotalk","sex",user_id,1)[0],SQL_function.search_data("kakaotalk","age",user_id,1)[0],(SQL_function.search_data("kakaotalk","country",user_id,1)[0]+' '+SQL_function.search_data("kakaotalk","city",user_id,1)[0]),(SQL_function.search_data("kakaotalk","start_date",user_id,1)[0] + '~'+SQL_function.search_data("kakaotalk","end_date",user_id,1)[0]),SQL_function.search_data("kakaotalk","appeal_tag",user_id,1)[0]),user_id,"응","정보 수정할래","내 프로필 사진 볼래")
+        
+        a = CheckInput.CheckCityName(answer)
+        print(a)
+        if a is False:
+            SQL_function.update_data("kakaotalk","dialog_state","city",user_id)
+            message = send_message("입력한게 오타가 있거나 지역이름이 아닌거 같아. 다시 입력해줄래?")
+        else:
+            SQL_function.update_data("kakaotalk","dialog_state","citycheck",user_id)
+            UserLocDataGet("city",user_id,a)
+            message = Send_Button("{} 여행하는거 맞아?".format(SQL_function.search_data("kakaotalk","city",user_id,1)[0]),"응","오타났나봐")
+
+    elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","user_state",user_id,1)[0]=='Existing' and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0]=='citycheck' and answer == "오타났나봐":
+        SQL_function.update_data("kakaotalk","dialog_state","city",user_id)
+        message = send_message("여행하는 도시를 다시 입력해줘")
+    
+    elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","user_state",user_id,1)[0]=='Existing' and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0]=='citycheck' and answer == "응":
+        SQL_function.update_data("kakaotalk","dialog_state","done",user_id)
+        message = UserProfile_Button("수정이 완료된 정보를 확인해봐\n성별 : {}  나이 : {}\n여행지 : {}\n여행날짜 : {}\n어필태그 : {}\n같은 정보로 찾아줄까?".format(SQL_function.search_data("kakaotalk","sex",user_id,1)[0],SQL_function.search_data("kakaotalk","age",user_id,1)[0],(SQL_function.search_data("kakaotalk","country",user_id,1)[0]+' '+SQL_function.search_data("kakaotalk","city",user_id,1)[0]),(SQL_function.search_data("kakaotalk","start_date",user_id,1)[0] + '~'+SQL_function.search_data("kakaotalk","end_date",user_id,1)[0]),SQL_function.search_data("kakaotalk","appeal_tag",user_id,1)[0]),user_id,"응","정보 수정할래","내 프로필 사진 볼래")
   
     
     #기존회원의 경우 기존의 정보로 찾아달라고 하기
@@ -373,7 +461,7 @@ def IsUserNew():
     
     
     elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","user_state",user_id,1)[0] == "Existing" and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0] == "done" and answer =="동행 찾아볼래!":
-        message = UserProfile_Button("현재 저장된 정보를 확인해봐\n성별 : {}\n나이 : {}\n여행지 : {}\n여행날짜 : {}\n어필태그 : {}\n같은 정보로 찾아줄까?".format(SQL_function.search_data("kakaotalk","sex",user_id,1)[0],SQL_function.search_data("kakaotalk","age",user_id,1)[0],(SQL_function.search_data("kakaotalk","country",user_id,1)[0]+' '+SQL_function.search_data("kakaotalk","city",user_id,1)[0]),(SQL_function.search_data("kakaotalk","start_date",user_id,1)[0] + '~'+SQL_function.search_data("kakaotalk","end_date",user_id,1)[0]),SQL_function.search_data("kakaotalk","appeal_tag",user_id,1)[0]),user_id,"응","정보 수정할래","내 프로필 사진 볼래")
+        message = UserProfile_Button("현재 저장된 정보를 확인해봐\n성별 : {}  나이 : {}\n여행지 : {}\n여행날짜 : {}\n어필태그 : {}\n같은 정보로 찾아줄까?".format(SQL_function.search_data("kakaotalk","sex",user_id,1)[0],SQL_function.search_data("kakaotalk","age",user_id,1)[0],(SQL_function.search_data("kakaotalk","country",user_id,1)[0]+' '+SQL_function.search_data("kakaotalk","city",user_id,1)[0]),(SQL_function.search_data("kakaotalk","start_date",user_id,1)[0] + '~'+SQL_function.search_data("kakaotalk","end_date",user_id,1)[0]),SQL_function.search_data("kakaotalk","appeal_tag",user_id,1)[0]),user_id,"응","정보 수정할래","내 프로필 사진 볼래")
 
     elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","user_state",user_id,1)[0] == "Existing" and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0] == "done" and answer =="정보 수정할래":
         message = Change_Button()
