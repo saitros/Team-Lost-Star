@@ -2,7 +2,7 @@
 API_KEY = '1039143523:AAHTngxT5pk8WG_XSh562-vHoOvVxQj1fGI'
 
 # webhook을 걸 url
-WEBHOOK = 'https://23946476.ap.ngrok.io/telegram'
+WEBHOOK = 'https://5c4af050.ap.ngrok.io/telegram'
 
 
 BOT_INFO = 'https://api.telegram.org/bot{API_KEY}/getMe'.format(API_KEY=API_KEY)

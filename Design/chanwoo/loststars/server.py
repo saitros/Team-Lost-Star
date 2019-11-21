@@ -33,7 +33,7 @@ def index():
                     db.insert_value(bot.chat_id,'dialog_state','appeal_tag')
 
                 #프로필 사진 변경을 위해 사진을 올린 경우
-                elif db.get_single_value(bot.chat_id,"dialog_state") == "update_photo":
+                elif db.get_single_value(bot.chat_id,"dialog_state") == "update":
 
                     bot.save_image2db(bot.text)
                     result = db.get_userinfo("telegram",str(bot.chat_id))
@@ -44,8 +44,7 @@ def index():
                         .format(bot.name, result['sex'][0], result['age'][0], result['city'][0],
                                 result['start_date'][0] \
                                 + "  ~  " + result['end_date'][0], result['appeal_tag'][0])
-                    bot.send_img(open(bot.chat_id + ".png", "rb"), caption=text)
-                    bot.send_message("test", button.existing_user_keyboard())
+                    bot.send_img(result['profile_image'][0],text,button.update_button())
                     db.insert_value(bot.chat_id,"dialog_state","update")
 
                 else:

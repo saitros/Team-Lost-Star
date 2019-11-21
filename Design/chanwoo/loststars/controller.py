@@ -1,17 +1,19 @@
 import db
 import button_maker as button
-from PIL import Image
-import time
+
 import random
 
 def show_userinfo(bot):
 
     result = db.get_userinfo("telegram",str(bot.chat_id))
 
-    text = '''{}님이 입력하신 정보는 아래와 같습니다\n성별 : {}\n나이 : {}\n여행지 : {}\n여행기간 : {}\n여행정보 : {}\n''' \
+    text = '''{}님이 입력하신 정보는 아래와 같습니다\n성별 : {}\n나이 : {}\n여행지 : {}\n여행기간 : {}\n여행정보 : {}\n카카오id : {}\n''' \
         .format(bot.name, result['sex'][0], result['age'][0], result['city'][0], result['start_date'][0] \
-                + "  ~  " + result['end_date'][0], result['appeal_tag'][0])
-    bot.send_img(result['profile_image'][0],text,button.userinfo_update_keyboard())
+                + "  ~  " + result['end_date'][0], result['appeal_tag'][0],result['kakao_id'][0])
+
+    bot.send_img(result['profile_image'][0],text,button.update_button())
+
+    #bot.send_message("수정하고 싶은 항목을 골라봐",button.userinfo_update_keyboard())
 
     # if bot.state == "update":
     #
@@ -71,30 +73,45 @@ def button_controller(bot):
                 bot.edit_message(text, message_id, button.create_calendar(start=start, end=end))
 
 
+    elif button_type =="kakao_id":
 
+        open_cnt = db.get_single_value(bot.chat_id, "open_cnt")
+
+        if open_cnt > 3:
+            bot.send_message("카카오톡id는 하루에 3번만 볼 수 있어 ㅜㅜ")
+        else:
+            bot.send_message(separate_callback_data(query['data'])[1])
+
+
+        db.insert_value(bot.chat_id,"open_cnt",int(open_cnt)+1)
     elif bot.state == "match":
 
         prev_or_next = query['data']
+
+        #update할 메세지 id
         match_photo_id = db.get_single_value(bot.chat_id, "match_photo_id")
-        print("==",match_photo_id)
+
+        #db에서 리스트 받아온다
         matched_list = (db.get_single_value(bot.chat_id,"matched_list")).split(",")
-        print("matched_list" , matched_list)
         match_cnt = len(matched_list)
 
-        idx = db.get_single_value(bot.chat_id,"match_idx")
-        print(idx)
+        #현재 사용자의 idx (초기값은 0)
+        idx = db.get_single_value(bot.chat_id, "match_idx")
 
         if prev_or_next == "RIGHT":
             idx += 1
-            db.insert_value(bot.chat_id,"match_idx",int(idx))
-        else:
-            idx -= 1
+            if idx >= match_cnt:
+                idx=0
             db.insert_value(bot.chat_id, "match_idx", int(idx))
-        if idx >= match_cnt or idx == -1:
-            db.insert_value(bot.chat_id,"match_idx",0)
-            idx = db.get_single_value(bot.chat_id, "match_idx")
+        else:
 
+            idx -= 1
+            if idx<0:
+                idx = match_cnt-1
 
+            db.insert_value(bot.chat_id, "match_idx", int(idx))
+        print(idx)
+        #방향키 액션에 의한 인덱스에 대한 사람 찾기
         matched_person_platform = matched_list[idx][0]
         matched_person_id = matched_list[idx][1:]
 
@@ -108,8 +125,8 @@ def button_controller(bot):
                         matched_person_info['city'][0], matched_person_info['start_date'][0] + "  ~  " +matched_person_info['end_date'][0],
                         matched_person_info['appeal_tag'][0])
 
-            bot.edit_media(img_url, match_photo_id)
-            bot.edit_caption(text, match_photo_id)
+            bot.edit_media(img_url, match_photo_id,button.kakao_button(matched_person_info['kakao_id'][0]))
+            bot.edit_caption(text, match_photo_id,button.kakao_button(matched_person_info['kakao_id'][0]))
 
         elif matched_person_platform =='k':
             matched_person_info = db.get_userinfo("kakaotalk", matched_person_id)
@@ -122,10 +139,9 @@ def button_controller(bot):
                         matched_person_info['city'][0],
                         matched_person_info['start_date'][0] + "  ~  " + matched_person_info['end_date'][0],
                         matched_person_info['appeal_tag'][0])
-            print("=",match_photo_id)
-
-            bot.edit_media(img_url, match_photo_id)
-            bot.edit_caption(text, match_photo_id)
+            print(img_url)
+            bot.edit_media(img_url, match_photo_id, button.kakao_button(matched_person_info['kakao_id'][0]))
+            bot.edit_caption(text, match_photo_id, button.kakao_button(matched_person_info['kakao_id'][0]))
 
         elif matched_person_platform == 'f':
 
@@ -139,13 +155,42 @@ def button_controller(bot):
                         matched_person_info['start_date'][0] + "  ~  " + matched_person_info['end_date'][0],
                         matched_person_info['appeal_tag'][0])
             print(text)
-            bot.edit_media(img_url, match_photo_id)
-            bot.edit_caption(text, match_photo_id)
+            print(img_url)
+            bot.edit_media(img_url, match_photo_id,button.kakao_button(matched_person_info['kakao_id'][0]))
+            bot.edit_caption(text, match_photo_id,button.kakao_button(matched_person_info['kakao_id'][0]))
 
 
         # match_photo_id = db.get_single_value(bot.chat_id,"match_photo_id")
         # bot.edit_media("https://imgur.com/a/yWDcVZc",match_photo_id)
         # bot.edit_caption("바뀐다",match_photo_id)
+
+    elif bot.state == "update":
+
+        data = query['data']
+        print(data)
+        if data == "사진 바꾸기":
+
+            db.insert_value(bot.chat_id, "dialog_state", "update")
+            bot.send_message("바꾸고 싶은 사진을 올려줘")
+            print("change")
+
+        elif data == "태그 바꾸기":
+
+            db.insert_value(bot.chat_id, "dialog_state", "update_appeal_tag")
+            bot.send_message("변경할 내용을 작성해서 보내줘", button.existing_user_keyboard())
+
+        elif data == "여행 일정 바꾸기":
+            db.insert_value(bot.chat_id, "dialog_state", "update_date")
+            bot.send_message("아래 달력으로 여행 일정 수정해", button.existing_user_keyboard())
+            bot.send_message("여행일정 선택", button.create_calendar())
+
+        elif data == "여행지 바꾸기":
+            db.insert_value(bot.chat_id, "dialog_state", "update_city")
+            bot.send_message("변경할 여행지를 입력해줘")
+
+
+
+
 
 
 
@@ -154,7 +199,7 @@ def button_controller(bot):
 def text_controller(bot):
 
 
-    if bot.text == '/start':
+    if bot.text == '/start' or bot.text == "홈으로":
         bot.send_message("여행을 떠난다는 건 정말 행복한 일이지,,\n나도 이 지구별에 여행온지 벌써 2342년이나 됐네\n"
                          + "아래 버튼 중에 원하는 버튼을 눌러보렴",button.main_keyboard())
         db.insert_value(bot.chat_id,"dialog_state","start")
@@ -176,32 +221,32 @@ def text_controller(bot):
         bot.state = "update"
         show_userinfo(bot)
 
-
-    elif bot.text == "사진 바꾸기":
-
-        db.insert_value(bot.chat_id,"dialog_state","update_photo")
-        bot.send_message("바꾸고 싶은 사진을 올려줘",button.userinfo_update_keyboard())
-
-
-
-    elif bot.text == "태그 바꾸기":
-
-        db.insert_value(bot.chat_id,"dialog_state","update_appeal_tag")
-        bot.send_message("변경할 내용을 작성해서 보내줘",button.userinfo_update_keyboard())
-
-    elif bot.text == "여행 일정 바꾸기":
-
-        db.insert_value(bot.chat_id, "dialog_state", "update_date")
-        bot.send_message("아래 달력으로 여행 일정 수정해",button.userinfo_update_keyboard())
-        bot.send_message("여행일정 선택",button.create_calendar())
-
-
-
-
-    elif bot.text == "여행지 바꾸기":
-
-        db.insert_value(bot.chat_id,"dialog_state","update_city")
-        bot.send_message("변경할 여행지를 입력해줘")
+    #
+    # elif bot.text == "사진 바꾸기":
+    #
+    #     db.insert_value(bot.chat_id,"dialog_state","update_photo")
+    #     bot.send_message("바꾸고 싶은 사진을 올려줘",button.userinfo_update_keyboard())
+    #
+    #
+    #
+    # elif bot.text == "태그 바꾸기":
+    #
+    #     db.insert_value(bot.chat_id,"dialog_state","update_appeal_tag")
+    #     bot.send_message("변경할 내용을 작성해서 보내줘",button.userinfo_update_keyboard())
+    #
+    # elif bot.text == "여행 일정 바꾸기":
+    #
+    #     db.insert_value(bot.chat_id, "dialog_state", "update_date")
+    #     bot.send_message("아래 달력으로 여행 일정 수정해",button.userinfo_update_keyboard())
+    #     bot.send_message("여행일정 선택",button.create_calendar())
+    #
+    #
+    #
+    #
+    # elif bot.text == "여행지 바꾸기":
+    #
+    #     db.insert_value(bot.chat_id,"dialog_state","update_city")
+    #     bot.send_message("변경할 여행지를 입력해줘")
 
     elif bot.text == "새로운 여행 등록":
 
@@ -212,51 +257,55 @@ def text_controller(bot):
 
 
         _list=db.search_user("telegram",bot.chat_id)
+
         print(_list)
-        if _list:
-            bot.send_message("너와 어울리는 동행을 찾았어!", button.swiping_button())
-            matched_list = []
-            for item in _list:
-                if item[1] == "telegram":
-                    matched_list.append("t"+item[0])
-                elif item[1] == "kakaotalk":
-                    matched_list.append("k" + item[0])
-                elif item[1] == "facebook":
-                    matched_list.append("f" + item[0])
+
+        if _list is not -1:
+            if _list:
+                bot.send_message("너와 어울리는 동행을 찾았어!", button.swiping_button())
+                matched_list = []
+                for item in _list:
+                    if item[1] == "telegram":
+                        matched_list.append("t"+item[0])
+                    elif item[1] == "kakaotalk":
+                        matched_list.append("k" + item[0])
+                    elif item[1] == "facebook":
+                        matched_list.append("f" + item[0])
 
 
-            random.shuffle(matched_list)
-            matched_str = (",".join(matched_list))
+                random.shuffle(matched_list)
+                matched_str = (",".join(matched_list))
 
-            db.insert_value(bot.chat_id,"matched_list",matched_str)
-            db.insert_value(bot.chat_id,"dialog_state","match")
-            db.insert_value(bot.chat_id,"match_idx",0)
-
-
-            match1 = _list[0]
-            match1_info = db.get_userinfo("facebook",match1[0])
-            #print(match1_info)
+                db.insert_value(bot.chat_id,"matched_list",matched_str)
+                db.insert_value(bot.chat_id,"dialog_state","match")
+                db.insert_value(bot.chat_id,"match_idx",0)
 
 
-            text = '''{}님의 정보는 아래와 같습니다\n성별 : {}\n나이 : {}\n여행지 : {}\n여행기간 : {}\n태그 : {}\n''' \
-                    .format(match1_info['user_id'][0], str(match1_info['sex'][0]), match1_info['age'][0], match1_info['city'][0], match1_info['start_date'][0]+ "  ~  " + match1_info['end_date'][0], match1_info['appeal_tag'][0])
-
-            bot.send_img(match1_info['profile_image'][0],text,button.existing_user_keyboard())
+                matched_person_platform = matched_list[0][0]
+                matched_person_id = matched_list[0][1:]
 
 
-            db.insert_value(bot.chat_id, "match_photo_id", bot.message_id +2)
+                if matched_person_platform == "t":
+                    match1_info = db.get_userinfo("telegram", matched_person_id)
+                elif matched_person_platform == "k":
+                    match1_info = db.get_userinfo("kakaotalk",matched_person_id)
+                elif matched_person_platform == "f":
+                    match1_info = db.get_userinfo("facebook",matched_person_id)
+
+                print(match1_info['kakao_id'][0])
+
+                text = '''{}님의 정보는 아래와 같습니다\n성별 : {}\n나이 : {}\n여행지 : {}\n여행기간 : {}\n태그 : {}\n''' .format(match1_info['user_id'][0], str(match1_info['sex'][0]), match1_info['age'][0], match1_info['city'][0], match1_info['start_date'][0]+ "  ~  " + match1_info['end_date'][0], match1_info['appeal_tag'][0])
+
+                bot.send_img(match1_info['profile_image'][0],text,button.kakao_button(match1_info['kakao_id'][0]))
+
+                db.insert_value(bot.chat_id, "match_photo_id", bot.message_id +2)
 
 
-        else:
-            bot.send_message("동행을 찾지 못했어 ㅜㅜ", button.main_keyboard())
-        #bot.delete_message(bot.message_id+3)
-        #
-        # for i in _list:
-        #
-        #     bot.send_img(open(str(i[0])+".png","rb"))
-        #     text = '''{}님의 정보는 아래와 같습니다\n성별 : {}\n나이 : {}\n여행지 : {}\n여행기간 : {}\n여행정보 : {}\n''' \
-        #         .format(i[1], str(i[2]), i[3], i[4], i[5]+ "  ~  " + i[6], i[7])
-        #     bot.send_message(text,button.main_keyboard())
+
+
+            else:
+                bot.send_message("동행을 찾지 못했어 ㅜㅜ", button.main_keyboard())
+
 
 
     elif bot.state == 'age':
@@ -269,12 +318,21 @@ def text_controller(bot):
 
         db.insert_value(bot.chat_id, 'city', str(bot.text))
 
+        db.insert_value(bot.chat_id,"dialog_state","kakao_id")
+
+        bot.send_message("카카오톡 아이디를 알려주면 매칭된 사람들과 연락할 수 있는데 알려줄래?")
+
+
+
+    elif bot.state == "kakao_id":
+
+        db.insert_value(bot.chat_id, "kakao_id",str(bot.text))
+
         show_userinfo(bot)
+        # 이제 더이상 신규회원X
+        db.insert_value(bot.chat_id, 'user_state', 1)
 
-        #이제 더이상 신규회원X
-        db.insert_value(bot.chat_id,'user_state',1)
-
-        db.insert_value(bot.chat_id,'dialog_state','search')
+        db.insert_value(bot.chat_id, 'dialog_state', 'search')
 
 
     elif bot.state == "appeal_tag":
@@ -288,7 +346,7 @@ def text_controller(bot):
 
         db.insert_value(bot.chat_id,"appeal_tag",str(bot.text))
         bot.send_message("너의 정보가 아래와 같이 수정되었어")
-
+        db.insert_value(bot.chat_id,"dialog_state","update")
 
         show_userinfo(bot)
 
