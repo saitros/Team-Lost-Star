@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 import sys
-import SQL_function
-import CheckInput
+import kakaoimport.SQL_function as SQL_function
+import kakaoimport.CheckInput as CheckInput
 import re
 app = Flask(__name__)
 SHOWDB = {}
