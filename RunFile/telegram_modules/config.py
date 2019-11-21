@@ -2,7 +2,7 @@
 API_KEY = '1039143523:AAHTngxT5pk8WG_XSh562-vHoOvVxQj1fGI'
 
 # webhook을 걸 url
-WEBHOOK = 'https://03e4457c.ap.ngrok.io/telegram'
+WEBHOOK = 'https://e7ca0c96.ap.ngrok.io/telegram'
 
 
 BOT_INFO = 'https://api.telegram.org/bot{API_KEY}/getMe'.format(API_KEY=API_KEY)
@@ -41,7 +41,7 @@ EDIT_CAPTION = 'https://api.telegram.org/bot{API_KEY}/editMessageCaption'.format
 # db connection 정보
 host_name = "localhost"
 username = "root"
-password = "root"
-database_name = "loststar"
+password = "!dnzlxkfh0520!"
+database_name = "loststars"
 
 

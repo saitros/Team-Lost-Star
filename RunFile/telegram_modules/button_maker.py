@@ -6,13 +6,12 @@ from telegram_modules.config import ANSWER_CALLBACK_QUERY, EDIT_MESSAGE_TEXT, ED
 import telegram_modules.db as db
 import telegram_modules.button_maker as button
 
-
 def show_userinfo(bot):
-
+    bot.send_message("너의 정보가 아래와 같이 수정 되었어")
     result = db.get_userinfo("telegram",str(bot.chat_id))
 
-    text = '''{}님이 입력하신 정보는 아래와 같습니다\n성별 : {}\n나이 : {}\n여행지 : {}\n여행기간 : {}\n여행정보 : {}\n''' \
-        .format(bot.name, result['sex'][0], result['age'][0], result['city'][0], result['start_date'][0] \
+    text = '''성별 : {}\n나이 : {}\n여행지 : {}\n여행기간 : {}\n여행정보 : {}\n''' \
+        .format(result['sex'][0], result['age'][0], result['city'][0], result['start_date'][0] \
                 + "  ~  " + result['end_date'][0], result['appeal_tag'][0])
 
     bot.send_img(result['profile_image'][0],text,button.update_button())
@@ -89,6 +88,37 @@ def update_button():
 
 
     return InlineKeyboardMarkup(keyboard).to_json()
+
+
+def country_button():
+
+    keyboard = []
+    keyboard.append([InlineKeyboardButton("스페인",callback_data="나라;스페인")])
+    keyboard.append([InlineKeyboardButton("포르투갈",callback_data="나라;포르투갈")])
+    keyboard.append([InlineKeyboardButton("필리핀",callback_data="나라;필리핀")])
+
+
+    return InlineKeyboardMarkup(keyboard).to_json()
+
+def info_category_button():
+
+    keyboard = []
+    keyboard.append([InlineKeyboardButton("전통음식",callback_data="정보종류;전통음식")])
+    keyboard.append([InlineKeyboardButton("추천 음식점",callback_data="정보종류;추천 음식점")])
+    keyboard.append([InlineKeyboardButton("여행지",callback_data="정보종류;여행지")])
+
+
+    return InlineKeyboardMarkup(keyboard).to_json()
+
+def food_button():
+
+    keyboard = []
+    keyboard.append([InlineKeyboardButton("빠에야",callback_data="전통음식;빠에야")])
+    keyboard.append([InlineKeyboardButton("에빠야",callback_data="정보종류;에빠야")])
+    keyboard.append([InlineKeyboardButton("야빠에",callback_data="정보종류;야빠에")])
+
+    return InlineKeyboardMarkup(keyboard).to_json()
+
 
 
 
@@ -195,8 +225,6 @@ def process_calendar_selection(bot):
         requests.post(EDIT_MESSAGE_TEXT, json=params)
 
 
-
-
     elif action == "NEXT-MONTH":
         ne = curr + datetime.timedelta(days=31)
         params = {'chat_id': query['message']['chat']['id'], 'text': query['message']['text'],
@@ -206,14 +234,17 @@ def process_calendar_selection(bot):
         requests.post(EDIT_MESSAGE_TEXT, json=params)
 
     elif action == "FINISH":
+
         if bot.state == "date":
-            db.insert_value(bot.chat_id,"dialog_state",'city')
-            bot.send_message("내가 가봤던곳 중 가장 좋았던 여행지는 B612 행성인데, 너는 어디로 떠나?(예시: 파리 O , 프랑스 파리 X)")
+            db.insert_two_value(bot.chat_id,"dialog_state","is_end",'city',0)
+            text = "내가 가봤던곳 중 가장 좋았던 여행지는 어린왕자와 함께한 B612 행성인데!!\n너는 어디로 떠나?(예시: 파리 O , 프랑스 파리 X)"
+            #bot.send_message("내가 가봤던곳 중 가장 좋았던 여행지는 B612 행성인데, 너는 어디로 떠나?(예시: 파리 O , 프랑스 파리 X)")
+            bot.send_img("https://i.pinimg.com/564x/63/7b/f6/637bf69ded8c4025036ef21a9dc75ec6.jpg",text)
+
         elif bot.state == "update_date":
+
             show_userinfo(bot)
-
-            db.insert_value(bot.chat_id, "dialog_state", "update")
-
+            db.insert_two_value(bot.chat_id, "dialog_state","is_end","update",0)
 
 
     return None

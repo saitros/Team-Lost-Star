@@ -1,6 +1,6 @@
 import pymysql
 
-conn = pymysql.connect(host = 'localhost', user = 'root', password = 'root', db = 'loststar', charset = 'utf8')
+conn = pymysql.connect(host = 'localhost', user = 'root', password = '!dnzlxkfh0520!', db = 'loststars', charset = 'utf8')
 curs = conn.cursor()
 
 def is_user_new(platform,user_id):

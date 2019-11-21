@@ -3,7 +3,6 @@ import pandas as pd
 from telegram_modules.config import host_name,username,password,database_name
 
 
-
 def make_connection():
 
     conn = pymysql.connect(
@@ -53,6 +52,36 @@ def insert_value(chat_id,column,value):
 
     conn.close()
 
+def insert_two_value(chat_id,c1,c2,v1,v2):
+
+    conn = make_connection()
+    sql = "UPDATE telegram_user_tb SET " + c1 + " = %s," +c2 + " = %s" + " WHERE id = " + chat_id
+
+    mycursor = conn.cursor()
+
+    value = (v1,v2)
+    mycursor.execute(sql,value)
+
+    conn.commit()
+
+
+    conn.close()
+
+def insert_three_value(chat_id,c1,c2,c3,v1,v2,v3):
+
+    conn = make_connection()
+    sql = "UPDATE telegram_user_tb SET " + c1 + " = %s," +c2 + " = %s,"+c3 + " = %s" + " WHERE id = " + chat_id
+
+    mycursor = conn.cursor()
+
+    value = (v1,v2,v3)
+    mycursor.execute(sql,value)
+
+    conn.commit()
+
+
+    conn.close()
+
 def get_state(chat_id):
 
     conn = make_connection()
@@ -80,6 +109,18 @@ def get_userinfo(platform,chat_id):
     conn.close()
     return result
 
+
+def get_userinfo(platform,chat_id):
+
+    conn = make_connection()
+    sql = "SELECT * FROM {}_user_tb WHERE id={}".format(platform,chat_id)
+    df = pd.read_sql(sql, conn)
+
+    result = df.to_dict()
+    conn.close()
+    return result
+
+
 # 데이터 검색 기본값으로 fetchall
 def search_data(platform, column = "*", id = "NULL", opt = 0):
 
@@ -87,6 +128,10 @@ def search_data(platform, column = "*", id = "NULL", opt = 0):
     curs = conn.cursor()
 
     sql = "select {column} from {platform}_user_tb".format(column=column, platform=platform)
+
+
+
+
 
     if (id != "NULL"):
         sql = sql + " where id = (%s)"
@@ -150,21 +195,15 @@ def search_user(platform, id):
 
         # 같은 플랫폼 테이블 조인시 자기 자신은 제외
         if (platform == other_platform):
+
             id_list = list(id_list)
-            id_list.remove((id,))
-            # id_list.remove((str(id),))
+            id_list.remove(((id),))
             id_list = tuple(id_list)
 
         # 아이디 리스트에서 하나씩 뽑으면서 조회
         for item in id_list:
             #info = search_data(other_platform, "id, user_id, sex, age, city, start_date, end_date, appeal_tag", item)
-            print("~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`")
-            print(item)
-            print(type(item))
             info = search_data(other_platform, "id", item)
-            print("~`~~~~~~~~~~~$$$~~~~~~~~~~~~~~~~~~~~~~~~~~~`")
-            print(type(info))
-            print(info)
             temp=list(info[0])
             temp.append(other_platform)
             trip_users.append(temp)
@@ -176,8 +215,5 @@ def search_user(platform, id):
 
 
 if __name__ == '__main__':
-    #print(get_single_value(964322422,'sex'))
-    #get_userinfo(964322422)
-    #print(search_data("telegram"))
-    #print(search_data("telegram", "open_cnt", "964322422", 1))
-    print(search_user("telegram","964322422"))
+
+    print(search_data("telegram","*","740140183")[0])

@@ -4,15 +4,16 @@ import json
 
 API_KEY = "AIzaSyAjNDn5zApqM3juQPo74ur24OukKz_9MQY"
 
-def CheckCityName(input_city):
 
+def CheckCityName(input_city):
     # 한국어 -> 영어 번역
     translator = Translator()
     en_city = translator.translate(str(input_city), src='ko', dest='en').text
     print(en_city)
     # 구글 Place API를 통해 도시 정확도 체크
-    url = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input={en_city}&key={API_KEY}".format(en_city=en_city,API_KEY=API_KEY)
-    
+    url = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input={en_city}&key={API_KEY}".format(
+        en_city=en_city, API_KEY=API_KEY)
+
     response = requests.get(url).text
     city_data = json.loads(response)
 
@@ -34,8 +35,6 @@ def CheckCityName(input_city):
 
     # 다시 한국어로 번역된 도시 이름 반환
     return ko_city
-
-
 
 
 if __name__ == "__main__":

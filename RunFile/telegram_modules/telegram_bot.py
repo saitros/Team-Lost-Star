@@ -1,12 +1,7 @@
 import requests
 from telegram_modules.config import SEND_MESSAGE,SEND_PHOTO,EDIT_MESSAGE_TEXT,GET_FILE_PATH,GET_FILE,EDIT_MEDIA,DELETE_MESSAGE,EDIT_CAPTION
-import telegram_modules.db as db 
-import telegram_modules.button_maker as button
-from PIL import Image
-from io import BytesIO
+import telegram_modules.db as db
 import telegram_modules.imgur_api_call as imgur_api_call
-
-
 
 
 class TelegramBot:
@@ -19,6 +14,7 @@ class TelegramBot:
         self.state = None
         self.is_member = False
         self.message_id = None
+
     def __call__(self, data):
 
         if not 'callback_query' in data.keys():
@@ -31,6 +27,7 @@ class TelegramBot:
                 self.chat_id = str(chat_id)
                 self.text = msg
                 self.name = user_name
+
             else:
                 chat_id = data['message']['chat']['id']
                 msg = data['message']['text']
@@ -40,6 +37,7 @@ class TelegramBot:
                 self.text =msg
                 self.name = user_name
                 self.message_id = message_id
+
 
         else:
             chat_id = data['callback_query']['from']['id']
@@ -76,6 +74,7 @@ class TelegramBot:
 
     def edit_message(self,text,message_id,keyboard=None):
 
+
         if not keyboard:
             print("edit_message")
             params = {'chat_id': self.chat_id, 'text': text,'message_id':message_id}
@@ -92,15 +91,7 @@ class TelegramBot:
         else:
             params = {'chat_id': self.chat_id, 'caption': caption, 'photo': url}
             requests.post(SEND_PHOTO, json=params)
-        # params = {'chat_id': self.chat_id, 'caption': caption}
-        # requests.post(SEND_PHOTO, data=params, files={'photo': url})
 
-        # if keyboard is not None:
-        #     params = {'chat_id': self.chat_id, 'caption' : caption, 'reply_markup' : keyboard}
-        #     requests.post(SEND_PHOTO, json=params, files = {'photo': url})
-        # else:
-        #     params = {'chat_id': self.chat_id, 'caption': caption}
-        #     requests.post(SEND_PHOTO, json=params, files={'photo': url})
 
     def save_image2db(self,file_id):
 
