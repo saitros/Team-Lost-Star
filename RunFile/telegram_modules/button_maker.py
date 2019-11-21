@@ -6,6 +6,7 @@ from telegram_modules.config import ANSWER_CALLBACK_QUERY, EDIT_MESSAGE_TEXT, ED
 import telegram_modules.db as db
 import telegram_modules.button_maker as button
 
+
 def show_userinfo(bot):
 
     result = db.get_userinfo("telegram",str(bot.chat_id))

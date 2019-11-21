@@ -43,7 +43,7 @@ def search_data(platform, column = "*", id = "NULL", opt = 0):
     sql = "select {column} from {platform}_user_tb".format(column=column, platform=platform)
 
     if (id != "NULL"):
-        sql = sql + " where id = (%s)"
+        sql = sql + ' where id = (%s)'
         curs.execute(sql, id)
     else:
         curs.execute(sql)

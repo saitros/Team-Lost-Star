@@ -63,6 +63,7 @@ CREATE TABLE `kakaotalk_user_tb` (
   `dialog_state` varchar(32) COLLATE utf8_bin DEFAULT NULL,
   `user_state` varchar(32) COLLATE utf8_bin DEFAULT NULL,
   `open_cnt` int(8) NOT NULL DEFAULT '0',
+  `show_count` int(8) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -75,19 +76,25 @@ DROP TABLE IF EXISTS `telegram_user_tb`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `telegram_user_tb` (
-  `id` int(10) NOT NULL,
+  `id` varchar(255) NOT NULL,
   `user_id` varchar(32) COLLATE utf8_bin DEFAULT NULL,
   `sex` varchar(4) COLLATE utf8_bin DEFAULT NULL,
   `age` int(4) unsigned DEFAULT NULL,
   `profile_image` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `kakao_id` varchar(64) COLLATE utf8_bin DEFAULT NULL,
+  `country` varchar(10) COLLATE utf8_bin DEFAULT ' ',
   `city` varchar(10) COLLATE utf8_bin DEFAULT NULL,
   `start_date` varchar(10) COLLATE utf8_bin DEFAULT NULL,
   `end_date` varchar(10) COLLATE utf8_bin DEFAULT NULL,
   `appeal_tag` varchar(64) COLLATE utf8_bin DEFAULT NULL,
   `dialog_state` varchar(32) COLLATE utf8_bin DEFAULT NULL,
   `user_state` varchar(32) COLLATE utf8_bin DEFAULT NULL,
-  `open_cnt` int(8) NOT NULL DEFAULT '0',
+  `is_end` int(1) DEFAULT NULL,
+  `open_cnt` int(8) NOT NULL DEFAULT '1',
+  `match_idx` int(8) DEFAULT NULL,
+  `match_photo_id` varchar(45) DEFAULT NULL,
+  `match_info_id` varchar(45) DEFAULT NULL,
+  `matched_list` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;

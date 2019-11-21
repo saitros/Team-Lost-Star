@@ -117,19 +117,19 @@ def button_controller(bot):
 
         if matched_person_platform == 't':
 
-            matched_person_info = db.get_userinfo("telegram",matched_person_id)
+            matched_person_info = db.get_userinfo("telegram",str(matched_person_id))
 
             img_url = matched_person_info['profile_image'][0]
             text = '''{}님의 정보는 아래와 같습니다\n성별 : {}\n나이 : {}\n여행지 : {}\n여행기간 : {}\n태그 : {}\n''' \
                 .format(matched_person_info['user_id'][0], str(matched_person_info['sex'][0]), matched_person_info['age'][0],
                         matched_person_info['city'][0], matched_person_info['start_date'][0] + "  ~  " +matched_person_info['end_date'][0],
                         matched_person_info['appeal_tag'][0])
-
+            print(img_url)
             bot.edit_media(img_url, match_photo_id,button.kakao_button(matched_person_info['kakao_id'][0]))
             bot.edit_caption(text, match_photo_id,button.kakao_button(matched_person_info['kakao_id'][0]))
 
         elif matched_person_platform =='k':
-            matched_person_info = db.get_userinfo("kakaotalk", matched_person_id)
+            matched_person_info = db.get_userinfo("kakaotalk", str(matched_person_id))
 
             img_url = matched_person_info['profile_image'][0]
             print(img_url)
@@ -145,7 +145,7 @@ def button_controller(bot):
 
         elif matched_person_platform == 'f':
 
-            matched_person_info = db.get_userinfo("facebook", matched_person_id)
+            matched_person_info = db.get_userinfo("facebook", str(matched_person_id))
 
             img_url = matched_person_info['profile_image'][0]
             text = '''{}님의 정보는 아래와 같습니다\n성별 : {}\n나이 : {}\n여행지 : {}\n여행기간 : {}\n태그 : {}\n''' \

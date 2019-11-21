@@ -3,6 +3,7 @@ import pandas as pd
 from telegram_modules.config import host_name,username,password,database_name
 
 
+
 def make_connection():
 
     conn = pymysql.connect(
@@ -87,10 +88,6 @@ def search_data(platform, column = "*", id = "NULL", opt = 0):
 
     sql = "select {column} from {platform}_user_tb".format(column=column, platform=platform)
 
-
-
-
-
     if (id != "NULL"):
         sql = sql + " where id = (%s)"
         curs.execute(sql, id)
@@ -154,13 +151,20 @@ def search_user(platform, id):
         # 같은 플랫폼 테이블 조인시 자기 자신은 제외
         if (platform == other_platform):
             id_list = list(id_list)
-            id_list.remove((str(id),))
+            id_list.remove((id,))
+            # id_list.remove((str(id),))
             id_list = tuple(id_list)
 
         # 아이디 리스트에서 하나씩 뽑으면서 조회
         for item in id_list:
             #info = search_data(other_platform, "id, user_id, sex, age, city, start_date, end_date, appeal_tag", item)
+            print("~`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`")
+            print(item)
+            print(type(item))
             info = search_data(other_platform, "id", item)
+            print("~`~~~~~~~~~~~$$$~~~~~~~~~~~~~~~~~~~~~~~~~~~`")
+            print(type(info))
+            print(info)
             temp=list(info[0])
             temp.append(other_platform)
             trip_users.append(temp)

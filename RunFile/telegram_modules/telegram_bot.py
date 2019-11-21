@@ -1,12 +1,13 @@
 import requests
 from telegram_modules.config import SEND_MESSAGE,SEND_PHOTO,EDIT_MESSAGE_TEXT,GET_FILE_PATH,GET_FILE,EDIT_MEDIA,DELETE_MESSAGE,EDIT_CAPTION
-import telegram_modules.db as db
-import telegram_modules.imgur_api_call
+import telegram_modules.db as db 
 import telegram_modules.button_maker as button
 from PIL import Image
 from io import BytesIO
-from telegram import InputMediaPhoto
-import telegram_modules.imgur_api_call
+import telegram_modules.imgur_api_call as imgur_api_call
+
+
+
 
 class TelegramBot:
 
