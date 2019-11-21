@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 import sys
 import SQL_function
 import CheckInput
-import re
+
 app = Flask(__name__)
 SHOWDB = {}
 IDDB = {}
