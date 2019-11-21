@@ -1,75 +1,44 @@
 {
     "predictions": [
         {
-            "description": "California, USA",
-            "id": "b993df4055071925c7950dc2afd22c0b98f994e0",
+            "description": "Madrid, Spain",
+            "id": "8e431ef5ad3b7c115999d19fe4aa09e195cae372",
             "matched_substrings": [
                 {
-                    "length": 10,
+                    "length": 6,
                     "offset": 0
+                },
+                {
+                    "length": 5,
+                    "offset": 8
                 }
             ],
-            "place_id": "ChIJPV4oX_65j4ARVW8IJ6IJUYs",
-            "reference": "ChIJPV4oX_65j4ARVW8IJ6IJUYs",
+            "place_id": "ChIJgTwKgJcpQg0RaSKMYcHeNsQ",
+            "reference": "ChIJgTwKgJcpQg0RaSKMYcHeNsQ",
             "structured_formatting": {
-                "main_text": "California",
+                "main_text": "Madrid",
                 "main_text_matched_substrings": [
                     {
-                        "length": 10,
+                        "length": 6,
                         "offset": 0
                     }
                 ],
-                "secondary_text": "USA"
+                "secondary_text": "Spain",
+                "secondary_text_matched_substrings": [
+                    {
+                        "length": 5,
+                        "offset": 0
+                    }
+                ]
             },
             "terms": [
                 {
                     "offset": 0,
-                    "value": "California"
+                    "value": "Madrid"
                 },
                 {
-                    "offset": 12,
-                    "value": "USA"
-                }
-            ],
-            "types": [
-                "administrative_area_level_1",
-                "political",
-                "geocode"
-            ]
-        },
-        {
-            "description": "California City, CA, USA",
-            "id": "5e06d9df598d09735e02c5ac4fce1711333d645f",
-            "matched_substrings": [
-                {
-                    "length": 10,
-                    "offset": 0
-                }
-            ],
-            "place_id": "ChIJQwmmE9IpwoARMgv1O7TeWDQ",
-            "reference": "ChIJQwmmE9IpwoARMgv1O7TeWDQ",
-            "structured_formatting": {
-                "main_text": "California City",
-                "main_text_matched_substrings": [
-                    {
-                        "length": 10,
-                        "offset": 0
-                    }
-                ],
-                "secondary_text": "CA, USA"
-            },
-            "terms": [
-                {
-                    "offset": 0,
-                    "value": "California City"
-                },
-                {
-                    "offset": 17,
-                    "value": "CA"
-                },
-                {
-                    "offset": 21,
-                    "value": "USA"
+                    "offset": 8,
+                    "value": "Spain"
                 }
             ],
             "types": [
@@ -79,148 +48,200 @@
             ]
         },
         {
-            "description": "California State University Long Beach, Long Beach, CA, USA",
-            "id": "aeeafb0019ecc85acef4b9387352a60128b3848e",
+            "description": "Madrid Spain Temple - The Church of Jesus Christ of Latter-day Saints, Calle Templo, Madrid, Spain",
+            "id": "9b6ab638e121888830700bb02a61d90aa2e40413",
             "matched_substrings": [
                 {
-                    "length": 10,
+                    "length": 12,
                     "offset": 0
                 }
             ],
-            "place_id": "ChIJQ_aCKdgx3YARqy3HziZ_3B8",
-            "reference": "ChIJQ_aCKdgx3YARqy3HziZ_3B8",
+            "place_id": "ChIJ9UUnApolQg0Rp1y3MEXsJSQ",
+            "reference": "ChIJ9UUnApolQg0Rp1y3MEXsJSQ",
             "structured_formatting": {
-                "main_text": "California State University Long Beach",
+                "main_text": "Madrid Spain Temple - The Church of Jesus Christ of Latter-day Saints",
                 "main_text_matched_substrings": [
                     {
-                        "length": 10,
+                        "length": 12,
                         "offset": 0
                     }
                 ],
-                "secondary_text": "Long Beach, CA, USA"
+                "secondary_text": "Calle Templo, Madrid, Spain"
             },
             "terms": [
                 {
                     "offset": 0,
-                    "value": "California State University Long Beach"
+                    "value": "Madrid Spain Temple - The Church of Jesus Christ of Latter-day Saints"
                 },
                 {
-                    "offset": 40,
-                    "value": "Long Beach"
+                    "offset": 71,
+                    "value": "Calle Templo"
                 },
                 {
-                    "offset": 52,
-                    "value": "CA"
+                    "offset": 85,
+                    "value": "Madrid"
                 },
                 {
-                    "offset": 56,
-                    "value": "USA"
+                    "offset": 93,
+                    "value": "Spain"
                 }
             ],
             "types": [
+                "church",
+                "place_of_worship",
+                "point_of_interest",
+                "establishment"
+            ]
+        },
+        {
+            "description": "Madrid Spain Temple, Calle Templo, Madrid, Spain",
+            "id": "de323d5c2a382dca68c50ffb9a14f03896092bf2",
+            "matched_substrings": [
+                {
+                    "length": 12,
+                    "offset": 0
+                }
+            ],
+            "place_id": "ChIJI_UkPJolQg0RhzniFr9a6kc",
+            "reference": "ChIJI_UkPJolQg0RhzniFr9a6kc",
+            "structured_formatting": {
+                "main_text": "Madrid Spain Temple",
+                "main_text_matched_substrings": [
+                    {
+                        "length": 12,
+                        "offset": 0
+                    }
+                ],
+                "secondary_text": "Calle Templo, Madrid, Spain"
+            },
+            "terms": [
+                {
+                    "offset": 0,
+                    "value": "Madrid Spain Temple"
+                },
+                {
+                    "offset": 21,
+                    "value": "Calle Templo"
+                },
+                {
+                    "offset": 35,
+                    "value": "Madrid"
+                },
+                {
+                    "offset": 43,
+                    "value": "Spain"
+                }
+            ],
+            "types": [
+                "tourist_attraction",
+                "church",
+                "place_of_worship",
+                "point_of_interest",
+                "establishment"
+            ]
+        },
+        {
+            "description": "Spain Business School, Calle Antonio Toledano, Madrid, Spain",
+            "id": "4e7832a2558a4a893999f3be6a4f9b588c16146c",
+            "matched_substrings": [
+                {
+                    "length": 5,
+                    "offset": 0
+                },
+                {
+                    "length": 6,
+                    "offset": 47
+                }
+            ],
+            "place_id": "ChIJi64vsmqIQQ0RqlzBxIVz8gg",
+            "reference": "ChIJi64vsmqIQQ0RqlzBxIVz8gg",
+            "structured_formatting": {
+                "main_text": "Spain Business School",
+                "main_text_matched_substrings": [
+                    {
+                        "length": 5,
+                        "offset": 0
+                    }
+                ],
+                "secondary_text": "Calle Antonio Toledano, Madrid, Spain",
+                "secondary_text_matched_substrings": [
+                    {
+                        "length": 6,
+                        "offset": 24
+                    }
+                ]
+            },
+            "terms": [
+                {
+                    "offset": 0,
+                    "value": "Spain Business School"
+                },
+                {
+                    "offset": 23,
+                    "value": "Calle Antonio Toledano"
+                },
+                {
+                    "offset": 47,
+                    "value": "Madrid"
+                },
+                {
+                    "offset": 55,
+                    "value": "Spain"
+                }
+            ],
+            "types": [
+                "university",
                 "university",
                 "point_of_interest",
                 "establishment"
             ]
         },
         {
-            "description": "California Academy of Sciences, Music Concourse Drive, San Francisco, CA, USA",
-            "id": "d920c64674d4af2f684358adccbdf3f04eb70002",
+            "description": "Spain, Madrid, Spain",
+            "id": "43376ea3baebd03e8b6629f1230ce01554d4a636",
             "matched_substrings": [
                 {
-                    "length": 10,
+                    "length": 5,
                     "offset": 0
+                },
+                {
+                    "length": 6,
+                    "offset": 7
                 }
             ],
-            "place_id": "ChIJIUT7rEOHhYARucp3wM-HhBs",
-            "reference": "ChIJIUT7rEOHhYARucp3wM-HhBs",
+            "place_id": "ChIJyRlwGX4oQg0Ro5YtGBk8obo",
+            "reference": "ChIJyRlwGX4oQg0Ro5YtGBk8obo",
             "structured_formatting": {
-                "main_text": "California Academy of Sciences",
+                "main_text": "Spain",
                 "main_text_matched_substrings": [
                     {
-                        "length": 10,
+                        "length": 5,
                         "offset": 0
                     }
                 ],
-                "secondary_text": "Music Concourse Drive, San Francisco, CA, USA"
+                "secondary_text": "Madrid, Spain",
+                "secondary_text_matched_substrings": [
+                    {
+                        "length": 6,
+                        "offset": 0
+                    }
+                ]
             },
             "terms": [
                 {
                     "offset": 0,
-                    "value": "California Academy of Sciences"
+                    "value": "Spain"
                 },
                 {
-                    "offset": 32,
-                    "value": "Music Concourse Drive"
+                    "offset": 7,
+                    "value": "Madrid"
                 },
                 {
-                    "offset": 55,
-                    "value": "San Francisco"
-                },
-                {
-                    "offset": 70,
-                    "value": "CA"
-                },
-                {
-                    "offset": 74,
-                    "value": "USA"
+                    "offset": 15,
+                    "value": "Spain"
                 }
             ],
             "types": [
-                "aquarium",
-                "tourist_attraction",
-                "museum",
-                "point_of_interest",
-                "establishment"
-            ]
-        },
-        {
-            "description": "California's Great America, Great America Parkway, Santa Clara, CA, USA",
-            "id": "64da3e553288d4af509aebc8062fa9b07d50f0e6",
-            "matched_substrings": [
-                {
-                    "length": 10,
-                    "offset": 0
-                }
-            ],
-            "place_id": "ChIJq7iF28bJj4ARdWUD6DQUr3I",
-            "reference": "ChIJq7iF28bJj4ARdWUD6DQUr3I",
-            "structured_formatting": {
-                "main_text": "California's Great America",
-                "main_text_matched_substrings": [
-                    {
-                        "length": 10,
-                        "offset": 0
-                    }
-                ],
-                "secondary_text": "Great America Parkway, Santa Clara, CA, USA"
-            },
-            "terms": [
-                {
-                    "offset": 0,
-                    "value": "California's Great America"
-                },
-                {
-                    "offset": 28,
-                    "value": "Great America Parkway"
-                },
-                {
-                    "offset": 51,
-                    "value": "Santa Clara"
-                },
-                {
-                    "offset": 64,
-                    "value": "CA"
-                },
-                {
-                    "offset": 68,
-                    "value": "USA"
-                }
-            ],
-            "types": [
-                "tourist_attraction",
-                "amusement_park",
-                "point_of_interest",
                 "establishment"
             ]
         }

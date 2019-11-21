@@ -2,7 +2,7 @@ from googletrans import Translator
 import requests
 import json
 
-API_KEY = "YOUR_API_KEY"
+API_KEY = "AIzaSyAjNDn5zApqM3juQPo74ur24OukKz_9MQY"
 
 def CheckCityName(input_city):
     # 한국어 -> 영어 번역
@@ -14,6 +14,9 @@ def CheckCityName(input_city):
     
     response = requests.get(url).text
     city_data = json.loads(response)
+
+    with open("resp.json", "w", encoding="UTF-8") as f:
+        json.dump(city_data, f, ensure_ascii=False, indent=4)
 
     # 결과가 없을 경우를 위한 예외처리
     try:
@@ -38,7 +41,7 @@ def CheckCityName(input_city):
 
 
 if __name__ == "__main__":
-    city = CheckCityName("켈리포니아")
+    city = CheckCityName("스패인 마드리드")
     if (city == -1):
         print("입력한 도시 이름을 확인해주세요\n")
     else:
