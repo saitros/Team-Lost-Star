@@ -1,7 +1,12 @@
 from flask import Flask, request, jsonify
 import sys
-import SQL_function
-import CheckInput
+import kakaoimport.SQL_function as SQL_function
+import kakaoimport.CheckInput as CheckInput
+from telegram_modules.telegram_bot import TelegramBot
+import telegram_modules.button_maker as button
+from telegram_modules.controller import button_controller,text_controller
+import telegram_modules.db as db
+import time
 
 app = Flask(__name__)
 SHOWDB = {}
@@ -195,12 +200,12 @@ def UserDateDataGet():
     content = request.get_json()
     user_id = content['userRequest']['user']['id']
     user_answer = content['userRequest']['utterance']
-    SQL_function.update_data("kakaotalk","start_date",user_answer[0:2]+"-"+user_answer[2:4]+"-"+user_answer[4:6],user_id)
-    SQL_function.update_data("kakaotalk","end_date",user_answer[7:9]+"-"+user_answer[9:11]+"-"+user_answer[11:13],user_id)
+    SQL_function.update_data("kakaotalk","start_date","20"+user_answer[0:2]+"-"+user_answer[2:4]+"-"+user_answer[4:6],user_id)
+    SQL_function.update_data("kakaotalk","end_date","20"+user_answer[7:9]+"-"+user_answer[9:11]+"-"+user_answer[11:13],user_id)
     
     return 0
 
-def UserShow(id,DB):
+def UserShow(id,aDB):
     count = SQL_function.search_data("kakaotalk","show_count",id,1)[0]
     #USER정보 같은사람을 따로 추출하여 DB화하는 작업은 여기에 들어가야함
     message = {
@@ -239,7 +244,7 @@ def UserShow(id,DB):
                     ]
                 }
                 }
-    tempDB = DB[count:count+10]
+    tempDB = aDB[count:count+10]
     num = 0
     IDDB[id] = {}
     for i in tempDB:
@@ -274,7 +279,68 @@ def UserShow(id,DB):
     return message
 
 
-@app.route('/GoTogether', methods=['POST'])
+@app.route('/telegram', methods=['POST', 'GET'])
+def index():
+
+    if request.method == 'POST':
+
+
+        data = request.get_json()
+        #print(data)
+        bot = TelegramBot()
+        bot(data)
+
+
+        # 사용자의 text 입력 처리
+        if not 'callback_query' in data.keys():
+
+            #사용자가 사진 업로드 했을때는 여기로
+            if 'photo' in data['message'].keys():
+
+                #최초에 프로필 등록하기 위해 사진을 올린 경우
+                if db.get_single_value(bot.chat_id,"dialog_state") == "profile_image":
+
+                    bot.save_image2db(bot.text)
+                    bot.send_message("너를 표현하는 태그를 남겨주면 관심있는 사람들이 볼 수 있어")
+                    db.insert_value(bot.chat_id,'dialog_state','appeal_tag')
+
+                #프로필 사진 변경을 위해 사진을 올린 경우
+                elif db.get_single_value(bot.chat_id,"dialog_state") == "update":
+
+                    bot.save_image2db(bot.text)
+                    result = db.get_userinfo("telegram",str(bot.chat_id))
+                    bot.send_message("너의 정보가 아래와 같이 수정되었어")
+
+
+                    text = '''{}님이 입력하신 정보는 아래와 같습니다\n성별 : {}\n나이 : {}\n여행지 : {}\n여행기간 : {}\n여행정보 : {}\n''' \
+                        .format(bot.name, result['sex'][0], result['age'][0], result['city'][0],
+                                result['start_date'][0] \
+                                + "  ~  " + result['end_date'][0], result['appeal_tag'][0])
+                    bot.send_img(result['profile_image'][0],text,button.update_button())
+                    db.insert_value(bot.chat_id,"dialog_state","update")
+
+                else:
+                    bot.send_message("갑자기 왠 사진??")
+
+
+            else:
+                # 사용자 로그
+                print(bot.name + '(' + str(bot.chat_id) + ')' + '님이 ' + '[' + bot.text + ']' + '를 서버로 보냈습니다')
+
+                text_controller(bot)
+
+
+        # 사용자의 keyboard 입력 처리
+        else:
+
+            button_controller(bot)
+
+
+
+
+    return ''
+
+@app.route('/Kakao', methods=['POST'])
 def IsUserNew():
     content = request.get_json()
     user_id = content['userRequest']['user']['id']
@@ -538,13 +604,13 @@ def IsUserNew():
     elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","user_state",user_id,1)[0] == "Existing" and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0] == "done" and answer =="응":
         # DB = SQL_function.my_kakao_user_search(user_id)
         # if DB is False:
-        DB = SQL_function.search_user("kakaotalk",user_id)
+        aDB = SQL_function.search_user("kakaotalk",user_id)
         count = SQL_function.search_data("kakaotalk","show_count",user_id,opt=1)[0]
-        if len(DB) == 0:
+        if len(aDB) == 0:
             message = Send_Button("미안해 동행이 가능한 사람이 없는거 같아..","처음으로","정보 수정할래")
         else:
-            if len(DB)>count:
-                SHOWDB[user_id] = DB
+            if len(aDB)>count:
+                SHOWDB[user_id] = aDB
                 message = UserShow(user_id,SHOWDB[user_id])
             else:
                 message = send_message("더 이상 가능한 사람이 없어! 지금까지 보여준 사람중에 선택해봐!")
@@ -559,13 +625,13 @@ def IsUserNew():
     elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","user_state",user_id,1)[0] == "Existing" and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0] == "done" and answer =="다음사람보기":
         # DB = SQL_function.my_kakao_user_search(user_id)
         # if DB is False:
-        DB = SQL_function.search_user("kakaotalk",user_id)
+        aDB = SQL_function.search_user("kakaotalk",user_id)
         count = SQL_function.search_data("kakaotalk","show_count",user_id,opt=1)[0]
-        if len(DB) == 0:
+        if len(aDB) == 0:
             message = Send_Button("미안해 동행이 가능한 사람이 없는거 같아..","처음으로","정보 수정할래")
         else:
-            if len(DB)>count:
-                SHOWDB[user_id] = DB
+            if len(aDB)>count:
+                SHOWDB[user_id] = aDB
                 message = UserShow(user_id,SHOWDB[user_id])
             else:
                 message = send_message("더 이상 가능한 사람이 없어! 지금까지 보여준 사람중에 선택해봐!")
@@ -573,15 +639,15 @@ def IsUserNew():
     elif not SQL_function.is_user_new("kakaotalk",user_id) and SQL_function.search_data("kakaotalk","user_state",user_id,1)[0] == "Existing" and SQL_function.search_data("kakaotalk","dialog_state",user_id,1)[0] == "done" and answer =="이전사람보기":
         # DB = SQL_function.my_kakao_user_search(user_id)
         # if DB is False:
-        DB = SQL_function.search_user("kakaotalk",user_id)
+        aDB = SQL_function.search_user("kakaotalk",user_id)
         count = SQL_function.search_data("kakaotalk","show_count",user_id,opt=1)[0]
         SQL_function.update_data("kakaotalk","show_count",((count//10)*10)-10,user_id)
         count = SQL_function.search_data("kakaotalk","show_count",user_id,opt=1)[0]
-        if len(DB) == 0:
+        if len(aDB) == 0:
             message = Send_Button("미안해 동행이 가능한 사람이 없는거 같아..","처음으로","정보 수정할래")
         else:
-            if len(DB)>count:
-                SHOWDB[user_id] = DB
+            if len(aDB)>count:
+                SHOWDB[user_id] = aDB
                 message = UserShow(user_id,SHOWDB[user_id])
             else:
                 message = send_message("더 이상 가능한 사람이 없어! 지금까지 보여준 사람중에 선택해봐!")

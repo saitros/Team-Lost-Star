@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 import sys
 import SQL_function
 import CheckInput
-
+import re
 app = Flask(__name__)
 SHOWDB = {}
 IDDB = {}
@@ -272,7 +272,6 @@ def UserShow(id,DB):
         message["template"]["outputs"][0]["carousel"]["items"].append(buttons)
     SQL_function.update_data("kakaotalk","show_count",count,id)
     return message
-
 
 @app.route('/GoTogether', methods=['POST'])
 def IsUserNew():
