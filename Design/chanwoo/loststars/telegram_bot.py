@@ -85,9 +85,12 @@ class TelegramBot:
 
 
     def send_img(self, url,caption,keyboard=None):
-        params = {'chat_id': self.chat_id, 'caption': caption, 'photo' : url,'reply_markup':keyboard}
-        requests.post(SEND_PHOTO, json=params)
-
+        if keyboard:
+            params = {'chat_id': self.chat_id, 'caption': caption, 'photo' : url,'reply_markup':keyboard}
+            requests.post(SEND_PHOTO, json=params)
+        else:
+            params = {'chat_id': self.chat_id, 'caption': caption, 'photo': url}
+            requests.post(SEND_PHOTO, json=params)
         # params = {'chat_id': self.chat_id, 'caption': caption}
         # requests.post(SEND_PHOTO, data=params, files={'photo': url})
 
@@ -112,10 +115,10 @@ class TelegramBot:
         # img = Image.open(BytesIO(res.content))
         # img.save(self.chat_id+'.png')
 
-    def edit_media(self,url,id):
+    def edit_media(self,url,id,keyboard):
 
         print("edit_media")
-        params = {'chat_id': self.chat_id, 'message_id': id, "media":  {'type':'photo','media' : url}}
+        params = {'chat_id': self.chat_id, 'message_id': id, "media":  {'type':'photo','media' : url},'reply_markup':keyboard}
         requests.post(EDIT_MEDIA, json=params)
 
 
@@ -125,8 +128,8 @@ class TelegramBot:
         params = {'chat_id': self.chat_id, 'message_id': message_id}
         requests.post(DELETE_MESSAGE, json=params)
 
-    def edit_caption(self,text,id):
+    def edit_caption(self,text,id,keyboard):
 
         print("edit_caption")
-        params = {'chat_id': self.chat_id, 'message_id': id, "caption": text}
+        params = {'chat_id': self.chat_id, 'message_id': id, "caption": text,'reply_markup':keyboard}
         requests.post(EDIT_CAPTION, json=params)

@@ -14,7 +14,7 @@ def show_userinfo(bot):
         .format(bot.name, result['sex'][0], result['age'][0], result['city'][0], result['start_date'][0] \
                 + "  ~  " + result['end_date'][0], result['appeal_tag'][0])
 
-    bot.send_img(open(bot.chat_id + ".png", "rb"),text,button.main_keyboard())
+    bot.send_img(result['profile_image'][0],text,button.update_button())
     #bot.send_message(" ", button.existing_user_keyboard())
 
 def main_keyboard():
@@ -35,7 +35,7 @@ def existing_user_keyboard():
 
     keyboard = {
         'keyboard': [[
-            {'text': '새로운 여행 등록'},{'text': '동행 찾기'},{'text' : '사용자 정보 수정'}]],
+            {'text': '새로운 여행 등록'},{'text': '동행 찾기'},{'text' : '사용자 정보 수정'},{'text' : '홈으로'}]],
         'one_time_keyboard': False
     }
     return keyboard
@@ -62,8 +62,6 @@ def create_calendar_callback_data(action,year,month,day):
 
 
 
-
-
 def separate_callback_data(data):
     """ Separate the callback data"""
     return data.split(";")
@@ -73,8 +71,21 @@ def sex():
     keyboard = []
     row = []
 
-    keyboard.append([InlineKeyboardButton("남",callback_data=create_binary_callback_data('sex',"m"))])
-    keyboard.append([InlineKeyboardButton("여",callback_data=create_binary_callback_data('sex',"f"))])
+    keyboard.append([InlineKeyboardButton("남자",callback_data=create_binary_callback_data('sex',"남자"))])
+    keyboard.append([InlineKeyboardButton("여자",callback_data=create_binary_callback_data('sex',"여자"))])
+
+    return InlineKeyboardMarkup(keyboard).to_json()
+
+
+def update_button():
+
+    keyboard = []
+
+    keyboard.append([InlineKeyboardButton("사진 바꾸기",callback_data="사진 바꾸기")])
+    keyboard.append([InlineKeyboardButton("태그 바꾸기",callback_data="태그 바꾸기")])
+    keyboard.append([InlineKeyboardButton("여행 일정 바꾸기",callback_data="여행 일정 바꾸기")])
+    keyboard.append([InlineKeyboardButton("여행지 바꾸기",callback_data="여행지 바꾸기")])
+
 
     return InlineKeyboardMarkup(keyboard).to_json()
 
@@ -196,9 +207,11 @@ def process_calendar_selection(bot):
     elif action == "FINISH":
         if bot.state == "date":
             db.insert_value(bot.chat_id,"dialog_state",'city')
-            bot.send_message("내가 가봤던곳 중 가장 좋았던 여행지는 B612 행성인데, 너는 어디로 떠나?(예시: 프랑스 파리)")
+            bot.send_message("내가 가봤던곳 중 가장 좋았던 여행지는 B612 행성인데, 너는 어디로 떠나?(예시: 파리 O , 프랑스 파리 X)")
         elif bot.state == "update_date":
             show_userinfo(bot)
+
+            db.insert_value(bot.chat_id, "dialog_state", "update")
 
 
 
@@ -213,4 +226,11 @@ def swiping_button():
     keyboard.append(row)
     return InlineKeyboardMarkup(keyboard).to_json()
 
+
+def kakao_button(kakao_id):
+
+    keyboard = []
+    keyboard.append([InlineKeyboardButton("카카오id 보기",callback_data="kakao_id"+';'+kakao_id)])
+
+    return InlineKeyboardMarkup(keyboard).to_json()
 

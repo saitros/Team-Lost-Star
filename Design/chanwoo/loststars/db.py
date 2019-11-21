@@ -115,7 +115,7 @@ def search_user(platform, id):
     curs = conn.cursor()
 
     # 카카오톡 아이디 최대 열람 횟수, 테이블 갯수
-    MAX_OPEN_CNT = 5
+    MAX_OPEN_CNT = 3
     MAX_TABLE_CNT = 3
 
     # 플랫폼 리스트
@@ -123,9 +123,9 @@ def search_user(platform, id):
 
     # open_cnt 조회, 최대 열람 횟수를 넘어가면 -1 리턴후 함수 종료
     cnt = search_data(platform, "open_cnt", id, 1)
-    print(cnt)
-    if (cnt[0] > MAX_OPEN_CNT):
-        return -1
+    #print(cnt)
+    # if (cnt[0] > MAX_OPEN_CNT):
+    #     return -1
 
     # 2차원 tuple 형식으로 반환됨
     # print(city) --> (('파리',),)
