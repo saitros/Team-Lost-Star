@@ -5,10 +5,11 @@ import json
 API_KEY = "AIzaSyAjNDn5zApqM3juQPo74ur24OukKz_9MQY"
 
 def CheckCityName(input_city):
+
     # 한국어 -> 영어 번역
     translator = Translator()
     en_city = translator.translate(str(input_city), src='ko', dest='en').text
-    
+    print(en_city)
     # 구글 Place API를 통해 도시 정확도 체크
     url = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input={en_city}&key={API_KEY}".format(en_city=en_city,API_KEY=API_KEY)
     
@@ -25,11 +26,11 @@ def CheckCityName(input_city):
         # if input string is city, then types include "geocode"
         api_city_type = city_data['predictions'][0]["types"]
     except IndexError:
-        return -1
+        return False
 
     # 구글 Place API의 main_text 결과와 비교
     if (en_city != api_city) or ("geocode" not in api_city_type):
-        return -1
+        return False
 
     # 영어 -> 한국어 번역
     ko_city = translator.translate(en_city, src='en', dest='ko').text
@@ -41,8 +42,15 @@ def CheckCityName(input_city):
 
 
 if __name__ == "__main__":
+<<<<<<< HEAD
     city = CheckCityName("스패인 마드리드")
     if (city == -1):
+=======
+    city = CheckCityName("바르셀로나")
+    print(city)
+    if city is False:
+>>>>>>> 9c5a4273a7e31a8c14f3e110470a0341bc17df62
         print("입력한 도시 이름을 확인해주세요\n")
     else:
+
         print("목적지가 {} 맞습니까?\n".format(city))
