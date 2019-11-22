@@ -49,6 +49,8 @@ Team Lost Star 는 Chatbot 여우를 길들이는 중입니다 :D
 
 ![Untitled Diagram](https://raw.githubusercontent.com/saitros/Team-Lost-Star/master/Design/JaeIck/KakaoTalk_20191122_140658959.jpg)
 
+
+
 ## After Issue 
 
 작업간 추가된 사후 개선사항에 대한 명세는 다음 [이슈](https://github.com/saitros/Team-Lost-Star/issues/5)를 참고
