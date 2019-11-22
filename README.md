@@ -20,6 +20,10 @@ SBA 인공지능챗봇 취업 교육과정 최종 프로젝트
 
 ![Untitled Diagram](https://user-images.githubusercontent.com/16240290/69394534-9b5e0980-0d1f-11ea-9336-84164832ce31.png)
 
+## After Issue 
+
+작업간 추가된 사후 개선사항에 대한 명세는 다음 [이슈](https://github.com/saitros/Team-Lost-Star/issues/5)를 참고
+
 ## Authors
 
 * **ChanWoo Kim** - *Telegram work* - [cw0516](https://github.com/cw0516)
