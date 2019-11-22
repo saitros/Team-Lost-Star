@@ -49,3 +49,4 @@ Team Lost Star 는 Chatbot 여우를 길들이는 중입니다 :D
 * **Junho Lee** - *Sub work* - [saitros](https://github.com/saitros)
 
 See also the list of [contributors](https://github.com/saitros/Team-Lost-Star/graphs/contributors) who participated in this project.
+
