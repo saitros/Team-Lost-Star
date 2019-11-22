@@ -11,7 +11,7 @@ SBA 인공지능챗봇 취업 교육과정 최종 프로젝트
 ## Design
 
 
-![동행매칭서비스분석](https://github.com/saitros/Team-Lost-Star/blob/master/Design/chanwoo/%EB%8F%99%ED%96%89%20%EB%A7%A4%EC%B9%AD%20%ED%95%A9%EB%A6%AC%ED%99%94%EC%8B%9C%ED%82%A4%EA%B8%B0.pptx)
+[동행 매칭 서비스 분석](https://github.com/saitros/Team-Lost-Star/blob/master/Design/chanwoo/%EB%8F%99%ED%96%89%20%EB%A7%A4%EC%B9%AD%20%ED%95%A9%EB%A6%AC%ED%99%94%EC%8B%9C%ED%82%A4%EA%B8%B0.pptx)
 ![Design](https://user-images.githubusercontent.com/16240290/69395298-d103f200-0d21-11ea-84a9-c0110b4d235f.jpg)
 
 
