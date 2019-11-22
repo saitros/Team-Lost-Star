@@ -47,7 +47,7 @@ Team Lost Star 는 Chatbot 여우를 길들이는 중입니다 :D
 
 여우가 보여준 사고회로는 다음과 같아요.(Feat. Google Draw.io)
 
-![Untitled Diagram](https://raw.githubusercontent.com/saitros/Team-Lost-Star/master/Design/JaeIck/KakaoTalk_20191122_140658959.jpg)
+![Untitled Diagram](https://github.com/saitros/Team-Lost-Star/blob/master/Design/Jun/Lost-Star.drawio.png)
 
 
 ## 데이터베이스 명세
