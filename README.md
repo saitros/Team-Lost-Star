@@ -11,4 +11,6 @@ SBA 인공지능챗봇 취업 교육과정 최종 프로젝트
 * **ChanWoo Kim** - *Initial work* - [cw0516](https://github.com/cw0516)
 * **Jihwan Lee** - *Initial work* - [vkdnjznd](https://github.com/vkdnjznd)
 * **Jaeick Hwang** - *Initial work* - [jaicoco](https://github.com/jaicoco)
-* **Junho Lee** - *Initial work* - [saitros](https://github.com/saitros)
+* **Junho Lee** - *Sub work* - [saitros](https://github.com/saitros)
+
+See also the list of [contributors](https://github.com/saitros/Team-Lost-Star/graphs/contributors) who participated in this project.
