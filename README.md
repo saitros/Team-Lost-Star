@@ -46,8 +46,8 @@ Team Lost Star 는 Chatbot 여우를 길들이는 중입니다 :D
 ## Authors
 
 * **ChanWoo Kim** - *Telegram work* - [cw0516](https://github.com/cw0516)
-* **Jihwan Lee** - *Kakaotalk work* - [vkdnjznd](https://github.com/vkdnjznd)
-* **Jaeick Hwang** - *DB work* - [jaicoco](https://github.com/jaicoco)
+* **Jihwan Lee** - *DB work* - [vkdnjznd](https://github.com/vkdnjznd)
+* **Jaeick Hwang** - *Kakaotalk work* - [jaicoco](https://github.com/jaicoco)
 * **Junho Lee** - *Sub work* - [saitros](https://github.com/saitros)
 
 See also the list of [contributors](https://github.com/saitros/Team-Lost-Star/graphs/contributors) who participated in this project.
