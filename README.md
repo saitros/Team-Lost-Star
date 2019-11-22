@@ -50,6 +50,10 @@ Team Lost Star 는 Chatbot 여우를 길들이는 중입니다 :D
 ![Untitled Diagram](https://raw.githubusercontent.com/saitros/Team-Lost-Star/master/Design/JaeIck/KakaoTalk_20191122_140658959.jpg)
 
 
+## 데이터베이스 명세
+
+![DB 명세](https://user-images.githubusercontent.com/16240290/69401795-59da5800-0d39-11ea-9909-805c7f496741.png)
+
 
 ## After Issue 
 
