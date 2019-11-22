@@ -37,7 +37,7 @@ Team Lost Star 는 Chatbot 여우를 길들이는 중입니다 :D
 
 ## Flow Chart
 
-![Untitled Diagram](https://user-images.githubusercontent.com/16240290/69394534-9b5e0980-0d1f-11ea-9336-84164832ce31.png)
+![Untitled Diagram](https://raw.githubusercontent.com/saitros/Team-Lost-Star/master/Design/JaeIck/KakaoTalk_20191122_140658959.jpg)
 
 ## After Issue 
 
