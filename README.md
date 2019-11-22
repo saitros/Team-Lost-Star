@@ -2,10 +2,14 @@
 
 SBA 인공지능챗봇 취업 교육과정 최종 프로젝트
 
-수업 과정간 학습했던 내용을 바탕으로 하나의 서버에서 다양한 플렛폼 서비스를 목표
+목표
+* 수업 과정간 학습했던 내용을 바탕으로 하나의 서버에서 다양한 플렛폼 서비스
+* mysql DB 연동
+* 여행 정보 데이터 수집
+* github brunch로 각 플렛폼 별 작업 후 merge 
 
 # Chatbot 여(행하는) 우(友 친구)
-
+![사진](https://mblogthumb-phinf.pstatic.net/20160620_99/mikybong113_1466431410996E1LXs_JPEG/ART1512210710071B2G9KTC.jpg?type=w2)
 ```
 "길들인다는게 무슨 뜻이야?"
 
@@ -41,9 +45,15 @@ Team Lost Star 는 Chatbot 여우를 길들이는 중입니다 :D
 첫번째는, 여행지를 등록한 사람들간의 일정 매칭을 통한 사용자 검색이고
 두번째는, 가지고 있는 여행 정보중 일부만 살짝 알려주고있습니다.
 
-여우가 보여준 사고회로는 다음과 같아요.
+여우가 보여준 사고회로는 다음과 같아요.(Feat. Google Draw.io)
 
-![Untitled Diagram](https://raw.githubusercontent.com/saitros/Team-Lost-Star/master/Design/JaeIck/KakaoTalk_20191122_140658959.jpg)
+![Untitled Diagram](https://github.com/saitros/Team-Lost-Star/blob/master/Design/Jun/Lost-Star.drawio.png)
+
+
+## 데이터베이스 명세
+
+![DB 명세](https://user-images.githubusercontent.com/16240290/69401795-59da5800-0d39-11ea-9909-805c7f496741.png)
+
 
 ## After Issue 
 

@@ -80,6 +80,157 @@ def Send_Button(message,button1,button2):
     }
     return button
 
+def 임시메뉴선택(cityname):
+    message = {
+                "version": "2.0",
+                "template": {
+                    "outputs": [
+                    {
+                        "carousel": {
+                        "type": "basicCard",
+                        "items": [
+                            {
+                            "description": "{} 먹거리에 대해 알려줄까?".format(cityname),
+                            "thumbnail": {
+                                "imageUrl": "https://pgnqdrjultom1827145.cdn.ntruss.com/img/7e/20/7e20400cd53e7dafda1530d2d620934dc69084827cf04fb009b27b9899b9cc41_v1.jpg"
+                            },
+                            "buttons": [
+                                {
+                                "action": "message",
+                                "label": "{} 먹거리에 대해 알려줘".format(cityname),
+                                "messageText" : "{} 먹거리에 대해 알려줘".format(cityname)
+                                
+                                }
+                                
+                            ]
+                            },
+                            {"description": "{} 여행명소에 대해 알려줄까?".format(cityname),
+                            "thumbnail": {
+                                "imageUrl": "http://www.returnfarm.com/upload/editor/2014/6/9/b9c3ca64-a143-45d7-97a8-d000047442e1.jpg"
+                            },
+                            "buttons": [
+                                {
+                                "action": "message",
+                                "label": "{} 여행명소에 대해 알려줘".format(cityname),
+                                "messageText" : "{} 여행명소에 대해 알려줘".format(cityname)
+                                
+                                }
+                                
+                            ]},
+                            {"description": "{} 맛집에 대해 알려줄까?".format(cityname),
+                            "thumbnail": {
+                                "imageUrl": "https://data.ac-illust.com/data/thumbnails/fd/fde8895aa76f13a5c7087a4b0b42dd07_t.jpeg"
+                            },
+                            "buttons": [
+                                {
+                                "action": "message",
+                                "label": "{} 맛집에 대해 알려줘".format(cityname),
+                                "messageText" : "{} 맛집에 대해 알려줘".format(cityname)
+                                
+                                }
+                                
+                            ]}
+                            
+                            ],
+                    }}],
+            "quickReplies" : [
+                
+                {
+                    "action":"message",
+                    "label":"처음으로",                       
+                    "messageText":"처음으로"
+                    
+                }
+
+                    
+                    ]
+                }
+                }
+    return message
+def SpainCity():
+    message = {
+                "version": "2.0",
+                "template": {
+                    "outputs": [
+                    {
+                        "carousel": {
+                        "type": "basicCard",
+                        "items": [
+                            {
+                            "description": "마드리드에 대해 알려줄까?",
+                            "thumbnail": {
+                                "imageUrl": "http://imgnews.naver.net/image/5097/2015/09/17/263070_60774_5048_99_20150917175205.jpg"
+                            },
+                            "buttons": [
+                                {
+                                "action": "message",
+                                "label": "마드리드에 대해 알려줘",
+                                "messageText" : "마드리드에 대해 알려줘"
+                                
+                                }
+                                
+                            ]
+                            },
+                            {"description": "바르셀로나에 대해 알려줄까?",
+                            "thumbnail": {
+                                "imageUrl": "http://post.phinf.naver.net/MjAxNzA3MDVfMTE5/MDAxNDk5MjIzMjg2MDMw.hxLHwQ-EKQjUzmkkrKNCu2bIhAiGl53jwTOhHjIg-W0g.vmJXWH_ywQl7frPImGK3Jos70Kt84iwGj55exIDh0r0g.JPEG/IRQwsKIlGoPQmjQh6L08uPWpK4dk.jpg"
+                            },
+                            "buttons": [
+                                {
+                                "action": "message",
+                                "label": "바르셀로나에 대해 알려줘",
+                                "messageText" : "바르셀로나에 대해 알려줘"
+                                
+                                }
+                                
+                            ]},
+                            {"description": "세비야에 대해 알려줄까?",
+                            "thumbnail": {
+                                "imageUrl": "http://blogfiles.naver.net/20140624_266/maru10191_1403598630859t4GOU_JPEG/%BC%BC%BA%F1%BE%DF11.JPG"
+                            },
+                            "buttons": [
+                                {
+                                "action": "message",
+                                "label": "세비야에 대해 알려줘",
+                                "messageText" : "세비야에 대해 알려줘"
+                                
+                                }
+                                
+                            ]},
+                            {"description": "그라나다에 대해 알려줄까?",
+                            "thumbnail": {
+                                "imageUrl": "http://blogfiles.naver.net/20150916_160/cnfcomcom_1442381621243zKUYP_JPEG/%B1%D7%B6%F3%B3%AA%B4%D9_%B8%DE%C0%CE.jpg"
+                            },
+                            "buttons": [
+                                {
+                                "action": "message",
+                                "label": "그라나다에 대해 알아볼래",
+                                "messageText" : "그라나다에 대해 알아볼래"
+                                
+                                }
+                            
+                            ]},
+                            
+                            
+                            
+                            
+                            
+                        ]
+                    }}],
+            "quickReplies" : [
+                
+                {
+                    "action":"message",
+                    "label":"처음으로",                       
+                    "messageText":"처음으로"
+                    
+                }
+
+                    
+                    ]
+                }
+                }
+    return message
 #유저 본인 프로필버튼
 def UserProfile_Button(message,user_id,button1,button2,button3):
     message = {
@@ -204,6 +355,129 @@ def UserDateDataGet():
     SQL_function.update_data("kakaotalk","end_date","20"+user_answer[7:9]+"-"+user_answer[9:11]+"-"+user_answer[11:13],user_id)
     
     return 0
+
+def NationSelect():
+    message = {
+                "version": "2.0",
+                "template": {
+                    "outputs": [
+                    {
+                        "carousel": {
+                        "type": "basicCard",
+                        "items": [
+                            {
+                            "description": "스페인에 대해 알려줄까?",
+                            "thumbnail": {
+                                "imageUrl": "http://blogfiles.naver.net/MjAxODAxMDlfMTky/MDAxNTE1NDYxMDAzMTcy.OtaXexKg-32WLPJPrf5F_KCuMXv-QgT-HprpNjnihOgg.O86Mp25HDdUTptyoCYOmGAMRoGuXi2vm0bV5F2pLPW4g.JPEG.cindy620/Spain_Flag.jpg"
+                            },
+                            "buttons": [
+                                {
+                                "action": "message",
+                                "label": "스페인에 대해 알아볼래",
+                                "messageText" : "스페인에 대해 알아볼래"
+                                
+                                }
+                                
+                            ]
+                            },
+                            {"description": "포르투갈에 대해 알려줄까?",
+                            "thumbnail": {
+                                "imageUrl": "http://blogfiles.naver.net/MjAxNzExMjlfMjU0/MDAxNTExODk4MzI4NDAx.1lGxAya1IpSGf5h8deI94ZylH99CIWJt3E1cWThnKzcg.mqM6TKies3rPa8BKQTFYi6mUbbMIRXCJs2zfhhoI7cwg.JPEG.8282wowo/%C6%F7%B8%A3%C5%F5%B0%A5_%B1%B9%B1%E2.JPG"
+                            },
+                            "buttons": [
+                                {
+                                "action": "message",
+                                "label": "포르투갈에 대해 알아볼래",
+                                "messageText" : "포르투갈에 대해 알아볼래"
+                                
+                                }
+                                
+                            ]},
+                            {"description": "스위스에 대해 알려줄까?",
+                            "thumbnail": {
+                                "imageUrl": "http://cafefiles.naver.net/20120307_101/gikim7503_13311313549169duIt_PNG/800px-Civil_Ensign_of_Switzerland.svg.png"
+                            },
+                            "buttons": [
+                                {
+                                "action": "message",
+                                "label": "스위스에 대해 알아볼래",
+                                "messageText" : "스위스에 대해 알아볼래"
+                                
+                                }
+                                
+                            ]},
+                            {"description": "태국에 대해 알려줄까?",
+                            "thumbnail": {
+                                "imageUrl": "http://blogfiles.naver.net/MjAxOTA2MTFfMzAw/MDAxNTYwMjM3MTA0Nzk5.97HYuJVJp09TWjq_WMczcGNn0Ama3_TBaEczphvGCLIg.k6nWxWkqVNajJM23DuTibOoNLC7tV0RsNlxIRGhOZ-Ig.JPEG.youngsook6799/%C5%C2%B1%B9.jpg"
+                            },
+                            "buttons": [
+                                {
+                                "action": "message",
+                                "label": "태국에 대해 알아볼래",
+                                "messageText" : "태국에 대해 알아볼래"
+                                
+                                }
+                            
+                            ]},
+                            {"description": "필리핀에 대해 알려줄까?",
+                            "thumbnail": {
+                                "imageUrl": "http://blogfiles.naver.net/20131206_161/kctti_2013_1386297941562Giiuh_JPEG/%C7%CA%B8%AE%C7%C9%B1%B9%B1%E2.jpg"
+                            },
+                            "buttons": [
+                                {
+                                "action": "message",
+                                "label": "필리핀에 대해 알아볼래",
+                                "messageText" : "필리핀에 대해 알아볼래"
+                                
+                                }
+                                
+                            ]},
+                            {"description": "베트남에 대해 알려줄까?",
+                            "thumbnail": {
+                                "imageUrl": "http://post.phinf.naver.net/MjAxOTAzMTZfODcg/MDAxNTUyNzQxNDYzODE1.FF8F9UlckqDuAoTqpzZY5T-6FIB25qU9sjxSFgxz1ZYg.jQQxr6cHXjuPH4O1PfRI1LO6x5t4xyidk-ofePg2fcog.JPEG/IuVmYY2bZfvUoAIUmjiHFmlq1g9w.jpg"
+                            },
+                            "buttons": [
+                                {
+                                "action": "message",
+                                "label": "베트남에 대해 알아볼래",
+                                "messageText" : "베트남에 대해 알아볼래"
+                                
+                                }
+                                
+                            ]},
+                            {"description": "프랑스에 대해 알려줄까?",
+                            "thumbnail": {
+                                "imageUrl": "http://blogfiles.naver.net/MjAxNzAzMjNfOTcg/MDAxNDkwMjU5NzA3MjAw.--nQ4sSfbi2v1jE7HPg-l9Hz1r1kpzWR1E81v26RlYsg.sKke1Feu8D-N03eEBdXvKJwx8IwKoZuBEVYgJ7Jnfygg.PNG.bbbkorea2002/%BB%E7%BA%BB_-french-flag-1053711_1280.png"
+                            },
+                            "buttons": [
+                                {
+                                "action": "message",
+                                "label": "프랑스에 대해 알아볼래",
+                                "messageText" : "프랑스에 대해 알아볼래"
+                                
+                                }
+
+                            ]},
+                            
+                            
+                            
+                            
+                        ]
+                    }}],
+            "quickReplies" : [
+                
+                {
+                    "action":"message",
+                    "label":"처음으로",                       
+                    "messageText":"처음으로"
+                    
+                }
+
+                    
+                    ]
+                }
+                }
+    return message
 
 def UserShow(id,aDB):
     count = SQL_function.search_data("kakaotalk","show_count",id,1)[0]
@@ -350,7 +624,34 @@ def IsUserNew():
     if SQL_function.is_user_new("kakaotalk",user_id) and answer =="동행 찾아볼래!":
         SQL_function.insert_id_data("kakaotalk",(user_id,"new","new",0,0))
         message = Send_Button("처음왔구나 동행을 찾기위해선 너의 정보가 필요해! 작성 도중 처음화면으로 돌아가게되면 정보가 저장되지 않으니 주의해!\n너의 정보를 내가 물어봐도 괜찮아?","응","아니")
-        
+    
+    elif answer == "여행정보 알아볼래":
+        message = NationSelect()
+
+    elif answer == "스페인에 대해 알아볼래":
+        message = SpainCity()
+    
+    elif answer == "마드리드에 대해 알려줘":
+        message = 임시메뉴선택("마드리드")    
+    elif answer == "바르셀로나에 대해 알려줘":
+        message = 임시메뉴선택("바르셀로나")    
+    elif answer == "세비야에 대해 알려줘": 
+        message = 임시메뉴선택("세비야")   
+    elif answer == "그라나다에 대해 알려줘":
+        message = 임시메뉴선택("그라나다")
+
+    elif answer == "포르투갈에 대해 알아볼래":
+        return 0
+    elif answer == "태국에 대해 알아볼래":
+        return 0
+    elif answer == "베트남에 대해 알아볼래":
+        return 0
+    elif answer == "필리핀에 대해 알아볼래":
+        return 0
+    elif answer == "프랑스에 대해 알아볼래":
+        return 0
+    elif answer == "스위스에 대해 알아볼래":
+        return 0
     #신규회원이 작성도중 처음으로 갔을경우의 Flow
     elif SQL_function.search_data("kakaotalk","user_state",user_id,1)[0]=='new' and answer =="동행 찾아볼래!":
         SQL_function.update_data("kakaotalk","dialog_state","new",user_id)
@@ -747,6 +1048,14 @@ def IsUserNew():
             message = send_message("카카오톡 ID : {}".format(IDDB[user_id][10]))
         elif num >= 3:
             message = send_message("금일 검색가능한 횟수를 초과했어! 더 알고싶으면 결제를 해야해")
+    
+
+
+
+
+
+
+
     
     else:
         message = send_message("미안해 잘 못알아들었어! 다시 말해줄래?")

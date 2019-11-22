@@ -4,7 +4,7 @@ import datetime
 import requests
 from telegram_modules.config import ANSWER_CALLBACK_QUERY, EDIT_MESSAGE_TEXT, EDIT_MESSAGE_REPLY_MARKUP,DELETE_MESSAGE,SEND_MESSAGE
 import telegram_modules.db as db
-import telegram_modules.button_maker as button
+# import telegram_modules.button_maker as button
 
 def show_userinfo(bot):
     bot.send_message("너의 정보가 아래와 같이 수정 되었어")
