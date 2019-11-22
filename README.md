@@ -2,7 +2,11 @@
 
 SBA 인공지능챗봇 취업 교육과정 최종 프로젝트
 
-수업 과정간 학습했던 내용을 바탕으로 하나의 서버에서 다양한 플렛폼 서비스를 목표
+목표
+* 수업 과정간 학습했던 내용을 바탕으로 하나의 서버에서 다양한 플렛폼 서비스
+* mysql DB 연동
+* 여행 정보 데이터 수집
+* github brunch로 각 플렛폼 별 작업 후 merge 
 
 # Chatbot 여(행하는) 우(友 친구)
 ![사진](https://mblogthumb-phinf.pstatic.net/20160620_99/mikybong113_1466431410996E1LXs_JPEG/ART1512210710071B2G9KTC.jpg?type=w2)
