@@ -25,6 +25,8 @@ SBA 인공지능챗봇 취업 교육과정 최종 프로젝트
 ```
 Team Lost Star 는 Chatbot 여우를 길들이는 중입니다 :D 
 
+[카카오톡 여우 만나러가기](https://pf.kakao.com/_xcwxjxgT)
+
 ## Design
 
 
