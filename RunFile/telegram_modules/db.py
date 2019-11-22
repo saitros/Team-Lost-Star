@@ -214,6 +214,139 @@ def search_user(platform, id):
     return trip_users
 
 
+def GetCountryList(platform, id):
+    sql = "select distinct country from info_trip_tb;"
+
+    conn = make_connection()
+    curs = conn.cursor()
+
+    curs.execute(sql)
+
+    # 튜플안에 튜플의 형태
+    # ex) (('스페인',), ('필리핀',), ('포르투갈',), ('프랑스',), ('스위스',))
+    rows = curs.fetchall()
+
+    # 튜플의 각 원소만 리스트로 바꿈
+    # ['스페인', '필리핀', '포르투갈', '프랑스', '스위스']
+    country = list(map(lambda x: x[0], rows))
+
+    conn.close()
+
+    return country
+
+# 유저가 선택한 나라를 가져오는 함수
+def GetCountry(platform, id):
+    sql = "select info_country from {platform}_user_tb where id = (%s)".format(platform=platform)
+    conn = make_connection()
+    curs = conn.cursor()
+    curs.execute(sql, id)
+    country = curs.fetchone()
+    conn.close()
+
+    return country
+
+def GetCity(platform, id):
+    sql = "select info_city from {platform}_user_tb where id = (%s)".format(platform=platform)
+    conn = make_connection()
+    curs = conn.cursor()
+    curs.execute(sql, id)
+    country = curs.fetchone()
+    conn.close()
+    return country
+
+# 보여줄 여행 정보의 카테고리
+def GetCateList(platform, id):
+    # 유저가 선택한 여행 정보의 나라를 가져온다
+    # ex) ('스페인',)
+    country = GetCountry(platform, id)
+
+    # 그 나라가 가진 정보 카테고리를 가져온다
+    sql = "select distinct d_type from info_trip_tb where country = (%s);"
+
+    conn = make_connection()
+    curs = conn.cursor()
+    curs.execute(sql, country)
+
+    rows = curs.fetchall()
+
+    # 튜플의 각 원소만 리스트로 바꿈
+    # ['먹거리', '음식점', '여행지']
+    category = list(map(lambda x: x[0], rows))
+
+    # 버튼 이름 설정
+    idx = category.index('먹거리')
+    idx2 = category.index('음식점')
+    if (idx != -1):
+        category[idx] = '전통 음식'
+    if (idx2 != -1):
+        category[idx2] = '추천 음식점'
+
+    conn.close()
+    return category
+
+def GetCityList(platform, id):
+    country = GetCountry(platform, id)
+
+    # 여행 정보 테이블에 있는 도시 리스트를 가져온다
+    sql = "select distinct city from info_trip_tb where country = (%s) and city != ''"
+
+    conn = make_connection()
+    curs = conn.cursor()
+    curs.execute(sql, country)
+    rows = curs.fetchall()
+
+    # ['바르셀로나', '마드리드', '세비야', '그라나다']
+    cities = list(map(lambda x: x[0], rows))
+
+    conn.close()
+    return cities
+
+def GetInfoList(platform, id, d_type):
+    # 유저가 선택한 여행 정보의 나라를 가져온다
+    country = GetCountry(platform, id)
+
+    # 나라와 입력받은 type에 맞는 행을 가져온다
+    sql = "select d_title from info_trip_tb where country = (%s) and d_type = (%s)"
+
+    conn = make_connection()
+    curs = conn.cursor()
+
+    curs.execute(sql, (country[0], d_type))
+    rows = curs.fetchall()
+
+    # ['빠에야(Paella)', '하몬', '가스파초', '추로스', '핀쵸스 (Pinchos)']
+    food = list(map(lambda x: x[0], rows))
+    conn.close()
+    return food
+
+def GetInfoDetail(platform, id, type, title):
+    country = GetCountry(platform, id)
+
+    conn = make_connection()
+    curs = conn.cursor()
+
+    # 설명과 이미지 url을 가져온다
+    sql = "select d_source, d_url from info_trip_tb where country = (%s) and d_type = (%s) and d_title = (%s)"
+    curs.execute(sql, (country[0], type, title))
+    info_detail = curs.fetchone()
+    conn.close()
+    return info_detail
+
+def GetInfoCity(platform, id, d_type):
+    city = GetCity(platform, id)
+
+    # 도시에 해당하는 정보만 가져온다
+    sql = "select d_title from info_trip_tb where city = (%s) and d_type = (%s)"
+    conn = make_connection()
+    curs = conn.cursor()
+    curs.execute(sql, (city, d_type))
+    rows = curs.fetchall()
+
+    info_city = list(map(lambda x: x[0], rows))
+
+    conn.close()
+    return info_city
+
 if __name__ == '__main__':
 
     print(search_data("telegram","*","740140183")[0])

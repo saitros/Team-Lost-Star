@@ -2,15 +2,15 @@
 API_KEY = '1039143523:AAHTngxT5pk8WG_XSh562-vHoOvVxQj1fGI'
 
 # webhook을 걸 url
-WEBHOOK = 'https://e7ca0c96.ap.ngrok.io/telegram'
-
+# WEBHOOK = 'https://b4bfc74a.ap.ngrok.io/telegram'
+WEBHOOK = 'https://7b4858f4.ap.ngrok.io/telegram'
 
 BOT_INFO = 'https://api.telegram.org/bot{API_KEY}/getMe'.format(API_KEY=API_KEY)
 
 '''webhook을 통해서 우리 서버로 오지 못하고 telegram 서버에 쌓여있는 request정보들 보여주는 메소드
 이 메소드를 통해서 쌓인 request들을 출력해보고 아래 url을 
 https://api.telegram.org/bot{API_KEY}/getUpdates?offset=[request_id] 로 바꾸면 쌓인 request를 삭제할 수 있다'''
-BOT_UPDATE = 'https://api.telegram.org/bot{API_KEY}/getUpdates?offset=54234198'.format(API_KEY=API_KEY)
+BOT_UPDATE = 'https://api.telegram.org/bot{API_KEY}/getUpdates?offset=54234681'.format(API_KEY=API_KEY)
 
 # telegram과 bot과의 webhook 연결 해주는 메소드
 BOT_SET_WEBHOOK= 'https://api.telegram.org/bot{API_KEY}/setWebhook?url={WEBHOOK_URL}'\

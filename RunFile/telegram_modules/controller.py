@@ -5,14 +5,12 @@ import random
 
 def show_userinfo(bot):
 
-    result = db.get_userinfo("telegram",str(bot.chat_id))
-
-    text = '''성별 : {}\n나이 : {}\n여행지 : {}\n여행기간 : {}\n여행정보 : {}\n카카오id : {}\n''' \
-        .format(result['sex'][0], result['age'][0], result['city'][0], result['start_date'][0] \
-                + "  ~  " + result['end_date'][0], result['appeal_tag'][0],result['kakao_id'][0])
-
-    bot.send_img(result['profile_image'][0],text,button.update_button())
-
+    result = db.search_data("telegram", "*", bot.chat_id)[0]
+    text = '''성별 : {}\n나이 : {}\n여행지 : {}\n여행기간 : {}\n태그 : {}\n''' \
+        .format(str(result[2]), result[3],
+                result[4], result[5] + "  ~  " + result[6],
+                result[7])
+    bot.send_img(result[11], text,button.update_button())
 
 def create_callback_data(button_type,category):
     """ Create the callback data associated to each button"""
@@ -193,7 +191,7 @@ def button_controller(bot):
 
             country = separate_callback_data(query['data'])[1]
 
-            ################### db insert ######################
+            db.insert_value(bot.chat_id,"info_country",country)
 
             bot.send_message("이중에 어떤 정보가 필요해?",button.info_category_button())
 
@@ -201,17 +199,84 @@ def button_controller(bot):
 
             select=separate_callback_data(query['data'])[1]
 
+            country = db.GetCountry("telegram",bot.chat_id)[0]
+
             if select == "전통음식":
 
-                bot.send_message("{country}의 전통음식들이야\n 클릭하면 자세한 내용을 알려줄게",button.food_button())
+
+                bot.send_message("{country}의 전통음식들이야\n 클릭하면 자세한 내용을 알려줄게".format(country=country),button.food_button(bot))
+
+
 
             elif select == "추천 음식점":
 
-                bot.send_message("어떤 도시의 음식점 정보가 필요해?", button.food_button())
+                bot.send_message("어떤 도시의 음식점 정보가 필요해?", button.city_button(bot))
 
             elif select == "여행지":
 
-                bot.send_message("어떤 도시의 여행지 정보가 필요해?", button.food_button())
+                bot.send_message("어떤 도시의 여행지 정보가 필요해?", button.city_button(bot))
+
+        elif button_type == "전통음식":
+
+            food = separate_callback_data(query['data'])[1]
+
+            text = db.GetInfoDetail("telegram",bot.chat_id,"먹거리",food)[0]
+            #print(str(text[0],"utf-8"))
+
+            url = db.GetInfoDetail("telegram", bot.chat_id, "먹거리", food)[1]
+
+            if url == "":
+                url = "https://i.imgur.com/nGtXBZL.png"
+            if text == "":
+                text = "아직 설명을 준비중이야"
+            bot.send_photo(url,button.main_keyboard())
+            bot.send_message(text)
+
+        elif button_type == "도시이름":
+
+            city = separate_callback_data(query['data'])[1]
+            res = separate_callback_data(query['data'])[2]
+
+            db.insert_value(bot.chat_id,"info_city",city)
+
+            if res == "음식점":
+                bot.send_message(city+"의 추천음식점들이야 클릭하면 자세히 알려줄꼐",button.restaurant_button(bot))
+            else:
+                bot.send_message(city+"의 여행지들이야 클릭하면 자세히 알려줄꼐",button.place_button(bot))
+
+        elif button_type == "음식점이름":
+
+            restaurant = separate_callback_data(query['data'])[1]
+
+            text = db.GetInfoDetail("telegram", bot.chat_id, "음식점", restaurant)[0]
+            # print(str(text[0],"utf-8"))
+
+            url = db.GetInfoDetail("telegram", bot.chat_id, "음식점", restaurant)[1]
+
+            if url == "":
+                url = "https://i.imgur.com/nGtXBZL.png"
+
+            if text == "":
+                text = "아직 설명을 준비중이야"
+            bot.send_photo(url, button.main_keyboard())
+            bot.send_message(text)
+
+        elif button_type == "여행지":
+
+            place = separate_callback_data(query['data'])[1]
+
+            text = db.GetInfoDetail("telegram", bot.chat_id, "여행지", place)[0]
+            # print(str(text[0],"utf-8"))
+
+            url = db.GetInfoDetail("telegram", bot.chat_id, "여행지", place)[1]
+
+            if url == "":
+                url = "https://i.imgur.com/nGtXBZL.png"
+
+            if text == "":
+                text = "아직 설명을 준비중이야"
+            bot.send_photo(url, button.main_keyboard())
+            bot.send_message(text)
 
 
         else:
@@ -267,7 +332,8 @@ def text_controller(bot):
         print("매칭된 사람들 리스트 입니다",_list)
 
         if _list:
-            bot.send_message("너와 어울리는 동행을 찾았어!", button.swiping_button())
+            text = '좋아 성공적으로 너와 일정이 겹치는 동행들을 구해봤어!\n\n다음 사람들중에서 하루 최대 3명까지 카카오톡 ID를 알려줄꺼야\n\n하지만 알아둬\n동행을 찾는다는건 말이야\n아주 설레는 일이야 또 아주 무서운 일이기도 하지.\n\n너의 경험을 누구와 공유한다는건 정말 좋은 일이야\n그게 또 새로운 인연의 시작일 수도 있지\n하지만 잘못된 만남은 악연의 시작일 수도 있다는거 알아둬\n\n\n동행은 너가 혼자서 할 수 없는 일들을 가능하게 해줄꺼야\n할인, 다양한 음식, 사진찍기, 여행 정보 공유 등등\n하지만 너가 혼자서 할 수 있는 일들을 못하게 될 수도있어\n사람이 많아지면 변수도 많아지고 그러면 너의 여행이 계획대로\n흘러가지 않을 수도 있어'
+            bot.send_message(text, button.swiping_button())
             matched_list = []
             for item in _list:
                 if item[1] == "telegram":
@@ -362,16 +428,17 @@ def text_controller(bot):
 
     elif bot.state == "update_city":
 
+
         city = str(bot.text)
         city = CheckCityName(city)
-
         if city:
 
-            db.insert_value(bot.chat_id, 'city', str(bot.text))
+            db.insert_value(bot.chat_id, 'city', city)
 
             bot.send_message("너의 정보가 아래와 같이 수정되었어")
             show_userinfo(bot)
             db.insert_value(bot.chat_id, "dialog_state", "update")
+
         else:
             bot.send_message("잘못된 도시 이름을 입력한 것 같은데 확인하고 다시 입력해줘")
 

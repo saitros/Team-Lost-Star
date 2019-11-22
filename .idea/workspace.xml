@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3f9a70ef-c6cf-4106-a289-ea1eb259cc79" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/RunFile/telegram_modules/CheckInput.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Design/jihwan/SQL_Functions/CheckInput.py" beforeDir="false" afterPath="$PROJECT_DIR$/Design/jihwan/SQL_Functions/CheckInput.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RunFile/kakaoimport/SQL_function.py" beforeDir="false" afterPath="$PROJECT_DIR$/RunFile/kakaoimport/SQL_function.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RunFile/server.py" beforeDir="false" afterPath="$PROJECT_DIR$/RunFile/server.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RunFile/telegram_modules/CheckInput.py" beforeDir="false" afterPath="$PROJECT_DIR$/RunFile/telegram_modules/CheckInput.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/RunFile/telegram_modules/button_maker.py" beforeDir="false" afterPath="$PROJECT_DIR$/RunFile/telegram_modules/button_maker.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/RunFile/telegram_modules/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/RunFile/telegram_modules/config.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/RunFile/telegram_modules/controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/RunFile/telegram_modules/controller.py" afterDir="false" />
@@ -18,24 +18,12 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/RunFile/server.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="280">
-              <caret line="16" column="20" lean-forward="true" selection-start-line="16" selection-start-column="20" selection-end-line="16" selection-end-column="20" />
-              <folding>
-                <element signature="e#0#31#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/RunFile/kakaomain.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="6516">
-              <caret line="362" column="29" lean-forward="true" selection-start-line="362" selection-start-column="29" selection-end-line="362" selection-end-column="29" />
+            <state relative-caret-position="6372">
+              <caret line="362" column="29" selection-start-line="362" selection-start-column="29" selection-end-line="362" selection-end-column="29" />
               <folding>
                 <element signature="e#0#41#0" expanded="true" />
               </folding>
@@ -47,7 +35,7 @@
         <entry file="file://$PROJECT_DIR$/RunFile/kakaoimport/SQL_function.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="180">
-              <caret line="10" column="23" lean-forward="true" selection-start-line="10" selection-start-column="23" selection-end-line="10" selection-end-column="23" />
+              <caret line="10" column="23" selection-start-line="10" selection-start-column="23" selection-end-line="10" selection-end-column="23" />
             </state>
           </provider>
         </entry>
@@ -55,8 +43,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/RunFile/telegram_modules/button_maker.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="589">
-              <caret line="268" selection-start-line="268" selection-end-line="268" />
+            <state relative-caret-position="838">
+              <caret line="307" column="51" selection-start-line="307" selection-start-column="51" selection-end-line="307" selection-end-column="51" />
               <folding>
                 <element signature="e#0#103#0" expanded="true" />
               </folding>
@@ -67,7 +55,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/RunFile/telegram_modules/CheckInput.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="589">
+            <state relative-caret-position="752">
               <caret line="47" selection-start-line="47" selection-end-line="47" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
@@ -76,14 +64,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/RunFile/telegram_modules/controller.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="6642">
-              <caret line="369" column="63" lean-forward="true" selection-start-line="369" selection-start-column="63" selection-end-line="369" selection-end-column="63" />
-              <folding>
-                <element signature="e#0#32#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="838">
+              <caret line="453" selection-start-line="453" selection-end-line="453" />
             </state>
           </provider>
         </entry>
@@ -91,8 +76,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/RunFile/telegram_modules/db.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="589">
-              <caret line="218" column="53" selection-start-line="218" selection-start-column="53" selection-end-line="218" selection-end-column="53" />
+            <state relative-caret-position="838">
+              <caret line="351" column="53" selection-start-line="351" selection-start-column="53" selection-end-line="351" selection-end-column="53" />
               <folding>
                 <element signature="e#0#14#0" expanded="true" />
               </folding>
@@ -108,8 +93,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/RunFile/telegram_modules/telegram_bot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="233">
-              <caret line="111" column="17" selection-start-line="111" selection-start-column="17" selection-end-line="111" selection-end-column="17" />
+            <state relative-caret-position="158">
+              <caret line="103" selection-start-line="103" selection-end-line="103" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
@@ -120,8 +105,20 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/RunFile/telegram_modules/config.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="295">
-              <caret line="44" column="26" selection-start-line="44" selection-start-column="26" selection-end-line="44" selection-end-column="26" />
+            <state relative-caret-position="752">
+              <caret line="47" selection-start-line="47" selection-end-line="47" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/RunFile/server.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="360">
+              <caret line="55" lean-forward="true" selection-start-line="55" selection-end-line="55" />
+              <folding>
+                <element signature="e#0#31#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -142,12 +139,13 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/RunFile/kakaoimport/SQL_function.py" />
-        <option value="$PROJECT_DIR$/RunFile/telegram_modules/config.py" />
         <option value="$PROJECT_DIR$/RunFile/telegram_modules/button_maker.py" />
         <option value="$PROJECT_DIR$/RunFile/telegram_modules/CheckInput.py" />
+        <option value="$PROJECT_DIR$/RunFile/telegram_modules/controller.py" />
         <option value="$PROJECT_DIR$/RunFile/telegram_modules/db.py" />
         <option value="$PROJECT_DIR$/RunFile/telegram_modules/telegram_bot.py" />
-        <option value="$PROJECT_DIR$/RunFile/telegram_modules/controller.py" />
+        <option value="$PROJECT_DIR$/RunFile/telegram_modules/config.py" />
+        <option value="$PROJECT_DIR$/RunFile/server.py" />
       </list>
     </option>
   </component>
@@ -162,7 +160,7 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="1270" />
+    <option name="x" value="-11" />
     <option name="width" value="1301" />
     <option name="height" value="1550" />
   </component>
@@ -171,7 +169,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -200,9 +197,11 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
@@ -218,7 +217,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.kakaomain">
+  <component name="RunManager" selected="Python.server">
     <configuration name="kakaomain" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Team-Lost-Star" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -284,9 +283,9 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.kakaomain" />
         <item itemvalue="Python.server" />
         <item itemvalue="Python.webhook" />
+        <item itemvalue="Python.kakaomain" />
       </list>
     </recent_temporary>
   </component>
@@ -307,20 +306,20 @@
     <frame x="-7" y="-7" width="1721" height="1041" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Favorites" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.12997033" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.12997033" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Version Control" />
-      <window_info anchor="bottom" id="Python Console" />
-      <window_info anchor="bottom" id="Terminal" />
-      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.27896994" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.30364805" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info anchor="bottom" id="Terminal" order="8" />
+      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
+      <window_info anchor="bottom" id="Python Console" order="10" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -337,27 +336,19 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/RunFile/server.py">
+    <entry file="file://$USER_HOME$/Desktop/히로쿠배포/Bot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="280">
-          <caret line="16" column="20" lean-forward="true" selection-start-line="16" selection-start-column="20" selection-end-line="16" selection-end-column="20" />
+        <state>
           <folding>
-            <element signature="e#0#31#0" expanded="true" />
+            <element signature="e#0#23#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/RunFile/telegram_modules/config.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="295">
-          <caret line="44" column="26" selection-start-line="44" selection-start-column="26" selection-end-line="44" selection-end-column="26" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/RunFile/kakaomain.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6516">
-          <caret line="362" column="29" lean-forward="true" selection-start-line="362" selection-start-column="29" selection-end-line="362" selection-end-column="29" />
+        <state relative-caret-position="6372">
+          <caret line="362" column="29" selection-start-line="362" selection-start-column="29" selection-end-line="362" selection-end-column="29" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
           </folding>
@@ -367,14 +358,17 @@
     <entry file="file://$PROJECT_DIR$/RunFile/kakaoimport/SQL_function.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
-          <caret line="10" column="23" lean-forward="true" selection-start-line="10" selection-start-column="23" selection-end-line="10" selection-end-column="23" />
+          <caret line="10" column="23" selection-start-line="10" selection-start-column="23" selection-end-line="10" selection-end-column="23" />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/RunFile/telegram_modules/imgur_api_call.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/RunFile/telegram_modules/button_maker.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="589">
-          <caret line="268" selection-start-line="268" selection-end-line="268" />
+        <state relative-caret-position="838">
+          <caret line="307" column="51" selection-start-line="307" selection-start-column="51" selection-end-line="307" selection-end-column="51" />
           <folding>
             <element signature="e#0#103#0" expanded="true" />
           </folding>
@@ -383,7 +377,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/RunFile/telegram_modules/CheckInput.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="589">
+        <state relative-caret-position="752">
           <caret line="47" selection-start-line="47" selection-end-line="47" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
@@ -391,35 +385,46 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/RunFile/telegram_modules/controller.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="838">
+          <caret line="453" selection-start-line="453" selection-end-line="453" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/RunFile/telegram_modules/db.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="589">
-          <caret line="218" column="53" selection-start-line="218" selection-start-column="53" selection-end-line="218" selection-end-column="53" />
+        <state relative-caret-position="838">
+          <caret line="351" column="53" selection-start-line="351" selection-start-column="53" selection-end-line="351" selection-end-column="53" />
           <folding>
             <element signature="e#0#14#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/RunFile/telegram_modules/imgur_api_call.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/RunFile/telegram_modules/telegram_bot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="233">
-          <caret line="111" column="17" selection-start-line="111" selection-start-column="17" selection-end-line="111" selection-end-column="17" />
+        <state relative-caret-position="158">
+          <caret line="103" selection-start-line="103" selection-end-line="103" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/RunFile/telegram_modules/controller.py">
+    <entry file="file://$PROJECT_DIR$/RunFile/telegram_modules/config.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6642">
-          <caret line="369" column="63" lean-forward="true" selection-start-line="369" selection-start-column="63" selection-end-line="369" selection-end-column="63" />
+        <state relative-caret-position="752">
+          <caret line="47" selection-start-line="47" selection-end-line="47" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/RunFile/server.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="55" lean-forward="true" selection-start-line="55" selection-end-line="55" />
           <folding>
-            <element signature="e#0#32#0" expanded="true" />
+            <element signature="e#0#31#0" expanded="true" />
           </folding>
         </state>
       </provider>

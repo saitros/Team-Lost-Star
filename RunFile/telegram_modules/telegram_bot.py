@@ -93,6 +93,16 @@ class TelegramBot:
             requests.post(SEND_PHOTO, json=params)
 
 
+    def send_photo(self,url,keyboard=None):
+
+        if keyboard:
+            params = {'chat_id': self.chat_id, 'photo' : url,'reply_markup':keyboard}
+            requests.post(SEND_PHOTO, json=params)
+        else:
+            params = {'chat_id': self.chat_id, 'photo': url}
+            requests.post(SEND_PHOTO, json=params)
+
+
     def save_image2db(self,file_id):
 
         params = {'file_id': file_id}

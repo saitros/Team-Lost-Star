@@ -92,10 +92,12 @@ def update_button():
 
 def country_button():
 
+
+    _list = db.GetCountryList("telegram","123")
+
     keyboard = []
-    keyboard.append([InlineKeyboardButton("스페인",callback_data="나라;스페인")])
-    keyboard.append([InlineKeyboardButton("포르투갈",callback_data="나라;포르투갈")])
-    keyboard.append([InlineKeyboardButton("필리핀",callback_data="나라;필리핀")])
+    for country in _list:
+        keyboard.append([InlineKeyboardButton(country, callback_data="나라;"+country)])
 
 
     return InlineKeyboardMarkup(keyboard).to_json()
@@ -110,12 +112,13 @@ def info_category_button():
 
     return InlineKeyboardMarkup(keyboard).to_json()
 
-def food_button():
+def food_button(bot):
 
+
+    foods = db.GetInfoList("telegram",bot.chat_id,"먹거리")
     keyboard = []
-    keyboard.append([InlineKeyboardButton("빠에야",callback_data="전통음식;빠에야")])
-    keyboard.append([InlineKeyboardButton("에빠야",callback_data="정보종류;에빠야")])
-    keyboard.append([InlineKeyboardButton("야빠에",callback_data="정보종류;야빠에")])
+    for food in foods:
+        keyboard.append([InlineKeyboardButton(food, callback_data="전통음식;"+food)])
 
     return InlineKeyboardMarkup(keyboard).to_json()
 
@@ -266,3 +269,40 @@ def kakao_button(kakao_id):
 
     return InlineKeyboardMarkup(keyboard).to_json()
 
+
+def city_button(bot,res=True):
+
+    citys = db.GetCityList("telegram",bot.chat_id)
+
+    keyboard = []
+    if not res:
+        for city in citys:
+
+            keyboard.append([InlineKeyboardButton(city, callback_data="도시이름" + ';' + city+";"+"음식점")])
+    else:
+        for city in citys:
+            keyboard.append([InlineKeyboardButton(city, callback_data="도시이름" + ';' + city+";"+"여행지")])
+
+    return InlineKeyboardMarkup(keyboard).to_json()
+
+def restaurant_button(bot):
+
+
+    restaurants = db.GetInfoCity("telegram",bot.chat_id,"음식점")
+    print(restaurants)
+    keyboard = []
+    for restaurant in restaurants:
+        keyboard.append([InlineKeyboardButton(restaurant, callback_data="음식점이름;"+restaurant)])
+
+    return InlineKeyboardMarkup(keyboard).to_json()
+
+def place_button(bot):
+
+
+    places = db.GetInfoCity("telegram",bot.chat_id,"여행지")
+
+    keyboard = []
+    for place in places:
+        keyboard.append([InlineKeyboardButton(place, callback_data="여행지;"+place)])
+
+    return InlineKeyboardMarkup(keyboard).to_json()

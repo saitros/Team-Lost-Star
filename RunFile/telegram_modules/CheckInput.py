@@ -2,7 +2,7 @@ from googletrans import Translator
 import requests
 import json
 
-API_KEY = "AIzaSyAjNDn5zApqM3juQPo74ur24OukKz_9MQY"
+API_KEY = "AIzaSyBCxrmnRIbhfNsbPyVgjQm4FabbUc1Gph0"
 
 
 def CheckCityName(input_city):

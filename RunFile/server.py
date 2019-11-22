@@ -4,6 +4,7 @@ import telegram_modules.button_maker as button
 from telegram_modules.controller import button_controller,text_controller
 import telegram_modules.db as db
 import time
+import os
 app = Flask(__name__)
 
 
@@ -16,6 +17,7 @@ def index():
         data = request.get_json()
         #print(data)
         bot = TelegramBot()
+
         bot(data)
 
 
@@ -29,7 +31,7 @@ def index():
                 if db.get_single_value(bot.chat_id,"dialog_state") == "profile_image":
 
                     bot.save_image2db(bot.text)
-                    bot.send_message("너를 표현하는 태그를 남겨주면 관심있는 사람들이 볼 수 있어")
+                    bot.send_message("너를 표현하는 태그를 남겨주면 관심있는 사람들이 볼 수 있어\n (예를 들면  #밥친구, #차량있음, #영어잘함)")
                     db.insert_value(bot.chat_id,'dialog_state','appeal_tag')
 
                 #프로필 사진 변경을 위해 사진을 올린 경우
@@ -51,12 +53,13 @@ def index():
                     bot.send_message("갑자기 왠 사진??")
 
 
+
             else:
+
                 # 사용자 로그
                 print(bot.name + '(' + str(bot.chat_id) + ')' + '님이 ' + '[' + bot.text + ']' + '를 서버로 보냈습니다')
 
                 text_controller(bot)
-
 
         # 사용자의 keyboard 입력 처리
         else:
@@ -69,4 +72,7 @@ def index():
     return ''
 
 if __name__ == '__main__':
-    app.run(host='localhost', port=5000, debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(debug=True, host='0.0.0.0', port=port)
+
+    #app.run(host='localhost', port=5000, debug=True)
