@@ -37,6 +37,12 @@ Team Lost Star 는 Chatbot 여우를 길들이는 중입니다 :D
 
 ## Flow Chart
 
+아직 길들여지지 않은 여우는 새침한 표정으로 두가지 대답밖에 해주지 않고있습니다.
+첫번째는, 여행지를 등록한 사람들간의 일정 매칭을 통한 사용자 검색이고
+두번째는, 가지고 있는 여행 정보중 일부만 살짝 알려주고있습니다.
+
+여우가 보여준 사고회로는 다음과 같아요.
+
 ![Untitled Diagram](https://raw.githubusercontent.com/saitros/Team-Lost-Star/master/Design/JaeIck/KakaoTalk_20191122_140658959.jpg)
 
 ## After Issue 
